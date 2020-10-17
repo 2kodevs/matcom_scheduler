@@ -1,3 +1,5 @@
+from model.utils import *
+
 def distance(data1:list, data2:list):
     '''
     Return the number of iversions
@@ -35,3 +37,31 @@ def distance(data1:list, data2:list):
         print("malformed args")
         return -1
     return inv
+
+def solve(data):
+    '''
+    Given a data set of option
+    find the distribution that
+    minimice the sumatory of 
+    inversions with every option
+    '''
+    if not data:
+        return None
+    dis = len(data) ** 2
+    best = data[0].copy()
+    best.sort()
+    cur = best.copy()
+    while True:
+        sum = 0
+        for item in data:
+            d = distance(item.copy(), cur.copy())
+            # //TODO: Manage the malformed args error
+            if d == -1: 
+                return None
+            sum += d
+        if sum < dis:
+            dis, best = sum, cur.copy()
+        if not next_permutation(cur):
+            break
+    return best
+
