@@ -1,4 +1,5 @@
 from bot.utils import is_chat_admin
+from telegram.ext import CommandHandler, Filters
 
 ADMINS_ONLY = 'Only admins can use this command, sorry :('
 ACTIVE      = 'There is a discussion open in this chat yet'
@@ -21,3 +22,9 @@ def create(update, context):
         assert False, CONFIG
     except AssertionError as e:
         update.effective_message.reply(str(e))
+
+create_handler = CommandHandler('create', create, Filters.group)
+
+bot_handlers = [
+    create_handler
+]
