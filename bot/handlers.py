@@ -16,6 +16,7 @@ CHOOSE_DEL      = 'Choose the options to delete one by one'
 USELESS         = "You didn't provide any options, try /config again when you are ready"
 DONE_CONFIG     = 'Perfect! The options provided by you are not editable.\nType /close in the related chat in order to close the discussion'
 INIT_DISCUSS    = 'Time to vote!!!\nSend /vote to participate.\n\nThe options to organize are:\n%s'
+BYE             = 'See you soon.'
 
 # States
 SELECT_STATE, ADD_STATE, DEL_STATE = range(3) 
@@ -144,6 +145,12 @@ def done_command(update, context):
     clean_config_data(context.user_data)
     return ConversationHandler.END    
 
+def cancel_config(update, context):
+    update.effective_message.reply_text(BYE, reply_markup=ReplyKeyboardRemove())
+    clean_config_data(context.user_data)
+    return ConversationHandler.END
+
+# Handlers
 create_handler = CommandHandler('create', create, Filters.group)
 
 bot_handlers = [
