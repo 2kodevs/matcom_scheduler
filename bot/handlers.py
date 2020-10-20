@@ -10,6 +10,8 @@ NO_CONFIG       = "You don't have any chat to configure.\nYou need to use /creat
 SELECT          = 'Select the chat that you want to configure'
 OPTIONS         = 'Start writing the options one by one.\nAdditionally you can use /del to delete some options, or /add to continue adding.\nUse /done at the end'
 WRONG_CHAT      = "You don't have any configuration active in the selected chat, sorry :(, try /config again."
+EMPTY           = "You don't have options to delete"
+CHOOSE_DEL      = 'Choose the options to delete one by one'
 
 # States
 SELECT_STATE, ADD_STATE, DEL_STATE = range(3) 
@@ -74,6 +76,22 @@ def add_options(update, context):
     update.effective_message.reply_text("Added correctly.")
     return ADD_STATE
 
+def del_command(update, context):
+    if not context.user_data.get('options'):
+        update.effective_user.send_message(EMPTY)
+        update.effective_user.send_message(
+            OPTIONS, 
+            reply_markup=ReplyKeyboardRemove(),
+        )
+        return ADD_STATE
+    update.effective_user.send_message(
+        CHOOSE_DEL,
+        reply_markup=ReplyKeyboardMarkup(
+            [[op] for op in context.user_data['options']],
+        )
+    )
+    return DEL_STATE
+    
 create_handler = CommandHandler('create', create, Filters.group)
 
 bot_handlers = [
