@@ -76,6 +76,13 @@ def add_options(update, context):
     update.effective_message.reply_text("Added correctly.")
     return ADD_STATE
 
+def add_command(update, context):
+    update.effective_message.reply_text(
+        OPTIONS,
+        reply_markup=ReplyKeyboardRemove(),
+    )
+    return ADD_STATE
+
 def del_command(update, context):
     if not context.user_data.get('options'):
         update.effective_user.send_message(EMPTY)
