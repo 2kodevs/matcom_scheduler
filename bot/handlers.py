@@ -1,4 +1,4 @@
-from bot.utils import is_chat_admin
+from bot.utils import is_chat_admin, clean_config_data
 from telegram import ReplyKeyboardMarkup, ReplyKeyboardRemove
 from telegram.ext import CommandHandler, Filters, ConversationHandler, MessageHandler
 
@@ -10,8 +10,12 @@ NO_CONFIG       = "You don't have any chat to configure.\nYou need to use /creat
 SELECT          = 'Select the chat that you want to configure'
 OPTIONS         = 'Start writing the options one by one.\nAdditionally you can use /del to delete some options, or /add to continue adding.\nUse /done at the end'
 WRONG_CHAT      = "You don't have any configuration active in the selected chat, sorry :(, try /config again."
+INVALID_OPTION  = "I don't have this option, select a valid one"
 EMPTY           = "You don't have options to delete"
 CHOOSE_DEL      = 'Choose the options to delete one by one'
+USELESS         = "You didn't provide any options, try /config again when you are ready"
+DONE_CONFIG     = 'Perfect! The options provided by you are not editable.\nType /close in the related chat in order to close the discussion'
+INIT_DISCUSS    = 'Time to vote!!!\nSend /vote to participate.\n\nThe options to organize are:\n%s'
 
 # States
 SELECT_STATE, ADD_STATE, DEL_STATE = range(3) 
@@ -122,6 +126,24 @@ def del_command(update, context):
     )
     return DEL_STATE
     
+def done_command(update, context):
+    if not context.user_data.get('options'):
+        update.effective_user.send_message(
+            USELESS, 
+            reply_markup=ReplyKeyboardRemove()
+        )
+    else:
+        update.effective_user.send_message(
+            DONE_CONFIG, 
+            reply_markup=ReplyKeyboardRemove()
+        )
+        chat_id = context.user_data['chat_id']
+        options = context.user_data['options']
+        context.dispatcher.chat_data[chat_id]['options'] = options
+        context.bot.send_message(chat_id, INIT_DISCUSS % ('\n'.join(options)))
+    clean_config_data(context.user_data)
+    return ConversationHandler.END    
+
 create_handler = CommandHandler('create', create, Filters.group)
 
 bot_handlers = [
