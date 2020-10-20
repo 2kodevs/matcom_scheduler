@@ -141,7 +141,10 @@ def done_command(update, context):
         chat_id = context.user_data['chat_id']
         options = context.user_data['options']
         context.dispatcher.chat_data[chat_id]['options'] = options
-        context.bot.send_message(chat_id, INIT_DISCUSS % ('\n'.join(options)))
+        idx = context.user_data['owner'].index(chat_id)
+        context.user_data['owner'].pop(idx)
+        text = '\n'.join(f'{i + 1}-) {op}' for i, op in enumerate(options))
+        context.bot.send_message(chat_id, INIT_DISCUSS % (text))
     clean_config_data(context.user_data)
     return ConversationHandler.END    
 
