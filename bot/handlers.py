@@ -1,9 +1,16 @@
 from bot.utils import is_chat_admin
-from telegram.ext import CommandHandler, Filters
+from telegram import ReplyKeyboardMarkup, ReplyKeyboardRemove
+from telegram.ext import CommandHandler, Filters, ConversationHandler, MessageHandler
 
-ADMINS_ONLY = 'Only admins can use this command, sorry :('
-ACTIVE      = 'There is a discussion that needs to be closed before create a new one'
-CONFIG      = 'This chat is now available in your private configuration options'
+# Messages
+ADMINS_ONLY     = 'Only admins can use this command, sorry :('
+ACTIVE          = 'There is a discussion that needs to be closed before creating a new one'
+CONFIG          = 'This chat is now available in your private configuration options'
+NO_CONFIG       = "You don't have any chat to configure.\nYou need to use /create command in some chat first."
+SELECT          = 'Select the chat that you want to configure'
+
+# States
+SELECT_STATE, ADD_STATE, DEL_STATE = range(3) 
 
 def create(update, context):
     '''
@@ -22,6 +29,23 @@ def create(update, context):
         assert False, CONFIG
     except AssertionError as e:
         update.effective_message.reply_text(str(e))
+
+def config(update, context):
+    if not context.user_data.get('owner'):
+        update.message.reply_text(NO_CONFIG)
+        return ConversationHandler.END
+    
+    keyboard = []
+    for chat_id in context.user_data['owner']:
+        keyboard.append([context.bot.get_chat(chat_id).title])
+    update.message.reply_text(
+        SELECT, 
+        reply_markup=ReplyKeyboardMarkup(
+            keyboard, 
+            one_time_keyboard=True,
+        ),
+    )
+    return SELECT_STATE
 
 create_handler = CommandHandler('create', create, Filters.group)
 
