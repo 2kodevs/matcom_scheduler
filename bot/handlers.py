@@ -76,6 +76,29 @@ def add_options(update, context):
     update.effective_message.reply_text("Added correctly.")
     return ADD_STATE
 
+def del_options(update, context):
+    option = update.effective_message.text
+    try:
+        idx = context.user_data['options'].index(option)
+        context.user_data['options'].pop(idx)
+    except ValueError:
+        update.effective_message.reply_text(INVALID_OPTION)
+        return DEL_STATE
+    if not context.user_data['options']:
+        update.effective_user.send_message(EMPTY)
+        update.effective_user.send_message(
+            OPTIONS, 
+            reply_markup=ReplyKeyboardRemove(),
+        )
+        return ADD_STATE
+    update.effective_message.reply_text(
+        "Deleted correctly.",
+        reply_markup=ReplyKeyboardMarkup(
+            [[op] for op in context.user_data['options']],
+        ),
+    )
+    return DEL_STATE
+
 def add_command(update, context):
     update.effective_message.reply_text(
         OPTIONS,
