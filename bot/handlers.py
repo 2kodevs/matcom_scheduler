@@ -153,6 +153,23 @@ def cancel_config(update, context):
 # Handlers
 create_handler = CommandHandler('create', create, Filters.group)
 
+config_handler = ConversationHandler(
+    entry_points=[CommandHandler('config', config, Filters.private)],
+    states={
+        SELECT_STATE: [MessageHandler(Filters.text & ~Filters.command & Filters.private, select)],
+        ADD_STATE: [MessageHandler(Filters.text & ~Filters.command & Filters.private, add_options)],
+        DEL_STATE: [MessageHandler(Filters.text & ~Filters.command & Filters.private, del_options)],
+    },
+    fallbacks=[
+        CommandHandler('cancel', cancel_config, Filters.private),
+        CommandHandler('add', add_command, Filters.private),
+        CommandHandler('del', del_command, Filters.private),
+        CommandHandler('done', done_command, Filters.private),
+    ]
+)
+
+# Handlers List
 bot_handlers = [
-    create_handler
+    create_handler, 
+    config_handler,
 ]
