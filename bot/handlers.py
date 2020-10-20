@@ -1,3 +1,4 @@
+from bot.filters import private_text_filter
 from bot.utils import is_chat_admin, clean_config_data
 from telegram import ReplyKeyboardMarkup, ReplyKeyboardRemove
 from telegram.ext import CommandHandler, Filters, ConversationHandler, MessageHandler
@@ -159,9 +160,9 @@ create_handler = CommandHandler('create', create, Filters.group)
 config_handler = ConversationHandler(
     entry_points=[CommandHandler('config', config, Filters.private)],
     states={
-        SELECT_STATE: [MessageHandler(Filters.text & ~Filters.command & Filters.private, select)],
-        ADD_STATE: [MessageHandler(Filters.text & ~Filters.command & Filters.private, add_options)],
-        DEL_STATE: [MessageHandler(Filters.text & ~Filters.command & Filters.private, del_options)],
+        SELECT_STATE: [MessageHandler(private_text_filter, select)],
+        ADD_STATE: [MessageHandler(private_text_filter, add_options)],
+        DEL_STATE: [MessageHandler(private_text_filter, del_options)],
     },
     fallbacks=[
         CommandHandler('cancel', cancel_config, Filters.private),
