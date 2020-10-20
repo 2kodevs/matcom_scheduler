@@ -8,10 +8,13 @@ ACTIVE          = 'There is a discussion that needs to be closed before creating
 CONFIG          = 'This chat is now available in your private configuration options'
 NO_CONFIG       = "You don't have any chat to configure.\nYou need to use /create command in some chat first."
 SELECT          = 'Select the chat that you want to configure'
+OPTIONS         = 'Start writing the options one by one.\nAdditionally you can use /del to delete some options, or /add to continue adding.\nUse /done at the end'
+WRONG_CHAT      = "You don't have any configuration active in the selected chat, sorry :(, try /config again."
 
 # States
 SELECT_STATE, ADD_STATE, DEL_STATE = range(3) 
 
+# Handler methods
 def create(update, context):
     '''
     Handler for /create command
@@ -47,6 +50,22 @@ def config(update, context):
     )
     return SELECT_STATE
 
+def select(update, context):
+    selection = update.effective_message.text
+    for chat_id in context.user_data.get('owner', []):
+        if context.bot.get_chat(chat_id).title == selection:
+            context.user_data['chat_id'] = chat_id
+            update.message.reply_text(
+                OPTIONS,
+                reply_markup=ReplyKeyboardRemove(),
+            )
+            return ADD_STATE
+    update.effective_message.reply_text(
+        WRONG_CHAT,
+        reply_markup=ReplyKeyboardRemove(),
+    )
+    return ConversationHandler.END
+    
 create_handler = CommandHandler('create', create, Filters.group)
 
 bot_handlers = [
