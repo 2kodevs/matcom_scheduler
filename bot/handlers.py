@@ -66,6 +66,14 @@ def select(update, context):
     )
     return ConversationHandler.END
     
+def add_options(update, context):
+    option = update.effective_message.text
+    if not context.user_data.get('options'):
+        context.user_data['options'] = []
+    context.user_data['options'].append(option)
+    update.effective_message.reply_text("Added correctly.")
+    return ADD_STATE
+
 create_handler = CommandHandler('create', create, Filters.group)
 
 bot_handlers = [
