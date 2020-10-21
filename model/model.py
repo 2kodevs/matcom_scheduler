@@ -8,16 +8,28 @@ def distance(data1:list, data2:list):
     <param> data2 - list of data
     <return> int - Number of inversions
     '''
-    d, n, cant = {}, 0, []
+    d, n = {}, 0
+
+    order1, order2 = data1.copy(), data2.copy()
+    order1.sort()
+    order2.sort()
+    just_one = len(data1) > 0
+    for i in range(1, len(order1)):
+        if order1[i] == order1[i - 1]:
+            just_one = False
+            break
+
+    if order1 != order2 or not just_one:
+        # //TODO: raise an error
+        print("malformed args")
+        return -1
 
     def update(item, n):
         pos = d.get(item)
         if pos is None:
             pos = n
             d[item] = n
-            cant.append(0)
             n += 1
-        cant[pos] += 1
         return n
 
     for item in data1: n = update(item, n)
@@ -30,12 +42,6 @@ def distance(data1:list, data2:list):
     for (i, item) in enumerate(data2):
         inv += abs(i - idx[d[item]])
 
-    data1.sort()
-    data2.sort()
-    if any(x != 2 for x in cant) or data1 != data2 or not data1:
-        # //TODO: raise an error
-        print("malformed args")
-        return -1
     return inv
 
 def solve(data):
@@ -54,7 +60,7 @@ def solve(data):
     while True:
         sum = 0
         for item in data:
-            d = distance(item.copy(), cur.copy())
+            d = distance(item, cur)
             # //TODO: Manage the malformed args error
             if d == -1: 
                 return None
