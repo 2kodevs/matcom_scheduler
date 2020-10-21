@@ -3,6 +3,9 @@
 run: ## Start the bot
 	@python main.py
 
+debug: ## Start the bot in debug mode
+	@python main.py --debug
+
 view: ## display the Makefile
 	@cat Makefile
 
