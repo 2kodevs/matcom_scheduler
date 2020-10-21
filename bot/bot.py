@@ -8,13 +8,13 @@ logger = logging.getLogger(__name__)
 
 def set_commands(bot):
     bot.set_my_commands([
-        ('create'   , 'New schedule discuss'),
-        ('config'   , 'Set the schedule options'),
-        ('vote'     , 'Take part in the current discussion'),
-        ('close'    , 'Close the current discussion'),
-        ('cancel'   , 'Cancel the current action'),
-        ('start'    , 'Start the bot'),
-        ('help'     , 'Show the bot help'),
+        ('create'   , 'Crea una nueva discusión del calendario.'),
+        ('config'   , 'Configura las opciones de la discución.'),
+        ('vote'     , 'Toma parte en la discusión actual.'),
+        ('close'    , 'Cierra la discusión actual.'),
+        ('cancel'   , 'Cancela la acción realizada.'),
+        ('start'    , 'Iniciar el bot.'),
+        ('help'     , 'Muestra la ayuda.'),
     ])
 
 class Scheduler_Bot:
@@ -27,6 +27,8 @@ class Scheduler_Bot:
         dispatcher = self.updater.dispatcher
 
         logger.log(logging.INFO, 'Adding handlers...')
+        set_commands(self.updater.bot)
+
         for handler in bot_handlers:
             dispatcher.add_handler(handler)
 
