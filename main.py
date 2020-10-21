@@ -1,36 +1,37 @@
 import logging
 
 from configparser import ConfigParser
-from sys import argv
 from telegram.ext import Updater
 
-debug = argv[1] == 'debug' if len(argv) > 1 else False
+from bot import Scheduler_Bot
 
-level = logging.INFO if not debug else logging.DEBUG
 
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=level)
-logger = logging.getLogger(__name__)
+def main(args):
+    level = logging.DEBUG if args.debug else logging.INFO
 
-def main():
-    logger.log(logging.INFO, 'Setting up bot...')
+    logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=level)
+    logger = logging.getLogger(__name__)
     
     config = ConfigParser()
     logger.log(logging.INFO, 'Loading configuration...')
-    config.read('config.ini')
+    config.read(args.config)
     logger.log(logging.INFO, 'Configuration loaded.')
 
-    updater = Updater(config['bot']['HTTP_API'], use_context=True)
-
-    logger.log(logging.INFO, 'Running bot...')
-    try:
-        updater.start_polling()
-    except Exception as e:
-        logger.log(logging.ERROR, e)
-        return
-    logger.log(logging.INFO, 'Bot sucessfully started.')
-
-    updater.idle()
+    token = config.get('bot', 'token', fallback=None)
+    if token:
+        bot = Scheduler_Bot(token)
+        
+        bot.run()
+    else:
+        raise Exception(f'Invalid or missing "token" in {args.config}')
     
 
 if __name__ == '__main__':
-    main()
+    import argparse
+
+    parser = argparse.ArgumentParser(description='Bot initializer')
+    parser.add_argument('-c', '--config', type=str, default='config.ini', help='path of the configuration file')
+    parser.add_argument('--debug', help='execute in debug mode')
+
+    args = parser.parse_args()
+    main(args)

@@ -1,4 +1,4 @@
-from bot.utils import is_chat_admin
+from .utils import is_chat_admin
 from telegram.ext import CommandHandler, Filters
 
 ADMINS_ONLY = 'Only admins can use this command, sorry :('
