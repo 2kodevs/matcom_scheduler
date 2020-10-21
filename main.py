@@ -1,7 +1,6 @@
 import logging
 
 from configparser import ConfigParser
-from telegram.ext import Updater
 
 from bot import Scheduler_Bot
 
