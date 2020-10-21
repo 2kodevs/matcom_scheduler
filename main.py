@@ -11,7 +11,7 @@ def main(args):
 
     logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=level)
     logger = logging.getLogger(__name__)
-    
+
     config = ConfigParser()
     logger.log(logging.INFO, 'Loading configuration...')
     config.read(args.config)
@@ -31,7 +31,7 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description='Bot initializer')
     parser.add_argument('-c', '--config', type=str, default='config.ini', help='path of the configuration file')
-    parser.add_argument('--debug', help='execute in debug mode')
+    parser.add_argument('--debug', help='execute in debug mode', action="store_true")
 
     args = parser.parse_args()
     main(args)
