@@ -7,3 +7,10 @@ def is_chat_admin(bot, chat_id, user_id):
         if member.user.id == user_id:
             return True
     return False
+
+def clean_config_data(data):
+    try:
+        del data['chat_id']
+        del data['options']
+    except KeyError:
+        pass
