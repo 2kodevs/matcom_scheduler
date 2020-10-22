@@ -1,12 +1,9 @@
-from bot.filters import private_text_filter
-from bot.utils import is_chat_admin, clean_config_data
+from .utils import clean_config_data
+from .filters import private_text_filter
 from telegram import ReplyKeyboardMarkup, ReplyKeyboardRemove
 from telegram.ext import CommandHandler, Filters, ConversationHandler, MessageHandler
 
 # Messages
-ADMINS_ONLY     = 'Only admins can use this command, sorry :('
-ACTIVE          = 'There is a discussion that needs to be closed before creating a new one'
-CONFIG          = 'This chat is now available in your private configuration options'
 NO_CONFIG       = "You don't have any chat to configure.\nYou need to use /create command in some chat first."
 SELECT          = 'Select the chat that you want to configure'
 OPTIONS         = 'Start writing the options one by one.\nAdditionally you can use /del to delete some options, or /add to continue adding.\nUse /done at the end'
@@ -23,24 +20,6 @@ BYE             = 'See you soon.'
 SELECT_STATE, ADD_STATE, DEL_STATE = range(3) 
 
 # Handler methods
-def create(update, context):
-    '''
-    Handler for /create command
-    '''
-    user = update.effective_user.id
-    chat = update.effective_chat.id
-    try:
-        assert is_chat_admin(context.bot, chat, user), ADMINS_ONLY
-        assert not context.chat_data.get('active'), ACTIVE
-        context.chat_data['active'] = True
-        context.chat_data['manager'] = user
-        if not context.user_data.get('owner'):
-            context.user_data['owner'] = []
-        context.user_data['owner'].append(chat)
-        assert False, CONFIG
-    except AssertionError as e:
-        update.effective_message.reply_text(str(e))
-
 def config(update, context):
     if not context.user_data.get('owner'):
         update.message.reply_text(NO_CONFIG)
@@ -154,9 +133,7 @@ def cancel_config(update, context):
     clean_config_data(context.user_data)
     return ConversationHandler.END
 
-# Handlers
-create_handler = CommandHandler('create', create, Filters.group)
-
+# Handler
 config_handler = ConversationHandler(
     entry_points=[CommandHandler('config', config, Filters.private)],
     states={
@@ -171,9 +148,3 @@ config_handler = ConversationHandler(
         CommandHandler('done', done_command, Filters.private),
     ]
 )
-
-# Handlers List
-bot_handlers = [
-    create_handler, 
-    config_handler,
-]
