@@ -23,3 +23,10 @@ def clean_vote_data(data):
         del data['selected']
     except KeyError:
         pass
+
+def clean_config_data(data):
+    try:
+        del data['chat_id']
+        del data['options']
+    except KeyError:
+        pass
