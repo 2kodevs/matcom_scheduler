@@ -18,9 +18,7 @@ def get_or_init(d: dict, key, default):
 
 def clean_vote_data(data):
     try:
-        del data['source_id']
-        del data['options']
-        del data['selected']
+        del data
     except KeyError:
         pass
 
