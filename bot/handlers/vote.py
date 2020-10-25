@@ -19,6 +19,7 @@ VOTING_IN = 'Usted esta votando en la discusion del grupo "%s". Marque en las op
 VOTING_IN_WHIT_STATE = VOTING_IN + '\n\nSu voto actual es:\n%s'
 CANCEL = 'Se ha cancelado su voto en la discusion de "%s". Escribe /vote de nuevo para iniciar otra votacion.'
 CONFIRM = 'Su voto en la discusion de "%s" a sido guardado satisfactoriamente. Recuerde que puede volver a ejercer su voto escribiendo /vote aqui nuevamente. Su ultimo voto valido sera el considerado al finalizar la discusion.'
+INVALID = 'Su voto no se a podido emitir correctamente. Esto puede ocurrir por varias razones entre ellas que la votacion a la cual hace referencia ya haya finalizado. Escriba /vote para emitir su voto de nuevo en la votacion correcta.'
 
 #Callback helpers
 AADD = 1
@@ -86,29 +87,38 @@ def voting_callback(update, context):
     query.answer()
     chat_id, operation, option =  parse_cdata(re.findall(VOTE_REGEX, query.data)[0])
     selected = context.user_data['voting_in'][chat_id]
+    chat_title = context.bot.get_chat(chat_id).title
     
     if operation == AADD:
         selected.append(option)
 
     if operation == AREM:
-        selected.remove(option)
-    
-    options = context.dispatcher.chat_data[chat_id]['options']
+        try:
+            selected.remove(option)
+        except ValueError:
+            context.user_data['voting_in'][chat_id] = None
+            query.edit_message_text(text=INVALID%chat_title)
+            return
+    options = []
+    if 'options' in context.dispatcher.chat_data[chat_id]:
+        options = context.dispatcher.chat_data[chat_id]['options']
+    if any([not op in options for op in selected ]):
+        context.user_data['voting_in'][chat_id] = None
+        query.edit_message_text(text=INVALID%chat_title)
+        return
     left = [op for op in options if not op in selected]
-    chat_title = context.bot.get_chat(chat_id).title
 
     if operation == ACAN:
+        context.user_data['voting_in'][chat_id] = None
         query.edit_message_text(text=CANCEL%chat_title)
-        # query.edit_message_reply_markup(reply_markup=InlineKeyboardMarkup([]))
         return
 
     if operation == ACOM:
         voters = get_or_init(context.dispatcher.chat_data[chat_id], 'voters', dict())
         user_id = update.effective_user.id
         voters[user_id] = selected
-        clean_vote_data(context.user_data['voting_in'][chat_id])
+        context.user_data['voting_in'][chat_id] = None
         query.edit_message_text(text=CONFIRM%chat_title)
-        # query.edit_message_reply_markup(reply_markup=InlineKeyboardMarkup([]))
         return
 
     keyboard = []
