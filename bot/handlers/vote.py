@@ -1,4 +1,3 @@
-import json
 import re
 
 from .filters import private_text_filter
@@ -13,7 +12,7 @@ VOTE_PATTERN = 'VOTE*%s*'
 NO_ACTIVE = 'No hay una discusion activa en este grupo.'
 NO_REGISTER = 'No encontramos ninguna discusion a la que se haya registrado. Escriba /register en el grupo donde la discusion haya sido creada para registrarse.'
 NO_CONFIG = 'No se ha configurado completamente aun la discusion actual.'
-REGISTERED = 'Usted a sido registrado como votante. Escribeme /vote por privado para emitir tu voto.'
+REGISTERED = 'Usted a sido registrado como votante. Escriba /vote por privado para emitir su voto.'
 START_SELECTION = 'Por favor escoja en que discusion desea participar:'
 VOTING_IN = 'Usted esta votando en la discusion del grupo "%s". Marque en las opciones para agregar al final o eliminar la opcion seleccionada. Marque cancelar para finalizar su voto. Una vez seleccionadas todas las opciones marque finalizar para emitir su voto.'
 VOTING_IN_WHIT_STATE = VOTING_IN + '\n\nSu voto actual es:\n%s'
@@ -67,7 +66,7 @@ def vote_selection_handler(update, context):
 def vote_selection_callback(update, context):
     query = update.callback_query
     query.answer()
-    chat_id = json.loads(re.findall(VOTE_SEL_REGEX, query.data)[0])
+    chat_id = int(re.findall(VOTE_SEL_REGEX, query.data)[0])
     chat_title = context.bot.get_chat(chat_id).title
     options = context.dispatcher.chat_data[chat_id]['options']
     context.user_data['voting_in'][chat_id] = []
@@ -133,7 +132,7 @@ def voting_callback(update, context):
     
     keyboard.append([InlineKeyboardButton('Cancelar', callback_data=build_cdata(chat_id, '', ACAN))] + ([] if left else [InlineKeyboardButton('Confirmar', callback_data=build_cdata(chat_id, '', ACOM))]))
 
-    state = '\n'.join([ f'{idx} - {option}' for idx, option in enumerate(selected) ])
+    state = '\n'.join([ f'{idx+1} - {option}' for idx, option in enumerate(selected) ])
     msg = VOTING_IN_WHIT_STATE%(chat_title, state) if selected else VOTING_IN%chat_title
 
     query.edit_message_text(text=msg)
