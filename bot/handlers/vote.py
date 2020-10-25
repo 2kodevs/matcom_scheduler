@@ -4,23 +4,21 @@ from telegram import ReplyKeyboardMarkup, ReplyKeyboardRemove
 from telegram.ext import CommandHandler, ConversationHandler, Filters, MessageHandler
 
 
-NO_ACTIVE = 'No hay discusiones activas en este grupo.'
+NO_ACTIVE = 'No hay una discusion activa en este grupo.'
+NO_CONFIG = 'No se ha configurado completamente aun la discusion actual.'
 REGISTERED = 'Usted a sido registrado como votante. Escribeme "/vote" por privado para emitir tu voto.'
 
 def vote_register(update, context):
     '''
-    Handler for /vote command
+    Handler for /vote and /register command
     '''
-    user = update.effective_user.id
-    user_data = update.effective_user
     chat = update.effective_chat.id
-    chat_data = update.effective_chat
+    user_data = context.user_data
     try:
         assert context.chat_data.get('active'), NO_ACTIVE
+        assert context.chat_data.get('options'), NO_CONFIG
         voting = get_or_init(user_data, 'voting', set())
-        voters = get_or_init(chat_data, 'voters', set())
         voting.add(chat)
-        voters.add(user)
         assert False, REGISTERED
     except AssertionError as e:
         update.effective_message.reply_text(str(e))
