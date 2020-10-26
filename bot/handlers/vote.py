@@ -1,7 +1,7 @@
 import re
 
 from .filters import private_text_filter
-from .utils import get_or_init, build_cdata, parse_cdata, parse_selected,\
+from .utils import get_or_init, vote_build_cdata, vote_parse_cdata, vote_parse_selected,\
     VOTE_PATTERN, VOTE_REGEX, VOTE_SEL_PATTERN, VOTE_SEL_REGEX,AADD, ACAN, ACOM, AREM
 from telegram import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
 from telegram.ext import CommandHandler, CallbackQueryHandler, Filters, MessageHandler
@@ -56,10 +56,10 @@ def vote_selection_callback(update, context):
     options = context.dispatcher.chat_data[chat_id]['options']
     keyboard = []
     for option in options:
-        cdata = build_cdata(chat_id, option, AADD)
+        cdata = vote_build_cdata(chat_id, option, AADD)
         keyboard.append([InlineKeyboardButton(f'Agregar "{option}"', 
                 callback_data=cdata)])
-    keyboard.append([InlineKeyboardButton('Cancelar', callback_data=build_cdata(chat_id, '', ACAN))])
+    keyboard.append([InlineKeyboardButton('Cancelar', callback_data=vote_build_cdata(chat_id, '', ACAN))])
 
     query.edit_message_text(text=VOTING_IN%chat_title)
     query.edit_message_reply_markup(reply_markup=InlineKeyboardMarkup(keyboard))
@@ -68,8 +68,8 @@ def vote_selection_callback(update, context):
 def voting_callback(update, context):
     query: CallbackQuery = update.callback_query
     query.answer()
-    chat_id, operation, option =  parse_cdata(re.findall(VOTE_REGEX, query.data)[0])
-    selected = parse_selected(query.message.text)
+    chat_id, operation, option =  vote_parse_cdata(re.findall(VOTE_REGEX, query.data)[0])
+    selected = vote_parse_selected(query.message.text)
     chat_title = context.bot.get_chat(chat_id).title
     
     if operation == AADD:
@@ -111,13 +111,13 @@ def voting_callback(update, context):
     
     for to_add in left:
         keyboard.append([InlineKeyboardButton(f'Agregar "{to_add}"', 
-                callback_data=build_cdata(chat_id, to_add, AADD))])
+                callback_data=vote_build_cdata(chat_id, to_add, AADD))])
     
     for to_quit in selected:
         keyboard.append([InlineKeyboardButton(f'Remover "{to_quit}"', 
-                callback_data=build_cdata(chat_id, to_quit, AREM))])
+                callback_data=vote_build_cdata(chat_id, to_quit, AREM))])
     
-    keyboard.append([InlineKeyboardButton('Cancelar', callback_data=build_cdata(chat_id, '', ACAN))] + ([] if left else [InlineKeyboardButton('Confirmar', callback_data=build_cdata(chat_id, '', ACOM))]))
+    keyboard.append([InlineKeyboardButton('Cancelar', callback_data=vote_build_cdata(chat_id, '', ACAN))] + ([] if left else [InlineKeyboardButton('Confirmar', callback_data=vote_build_cdata(chat_id, '', ACOM))]))
 
     state = '\n'.join([ f'{idx+1} - {option}' for idx, option in enumerate(selected) ])
     msg = VOTING_IN_WHIT_STATE%(chat_title, state) if selected else VOTING_IN%chat_title
