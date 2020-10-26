@@ -1,8 +1,7 @@
 import re
 
 from .filters import private_text_filter
-from .utils import get_or_init, vote_build_cdata, vote_parse_cdata, vote_parse_selected,\
-    VOTE_PATTERN, VOTE_REGEX, VOTE_SEL_PATTERN, VOTE_SEL_REGEX,AADD, ACAN, ACOM, AREM
+from .utils import get_or_init
 from telegram import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
 from telegram.ext import CommandHandler, CallbackQueryHandler, Filters, MessageHandler
 
@@ -17,6 +16,30 @@ VOTING_IN_WHIT_STATE = VOTING_IN + '\n\nSu voto actual es:\n%s'
 CANCEL = 'Se ha cancelado su voto en la discusion de "%s". Escribe /vote de nuevo para iniciar otra votacion.'
 CONFIRM = 'Su voto en la discusion de "%s" a sido guardado satisfactoriamente. Recuerde que puede volver a ejercer su voto escribiendo /vote aqui nuevamente. Su ultimo voto valido sera el considerado al finalizar la discusion.'
 INVALID = 'Su voto no se a podido emitir correctamente. Esto puede ocurrir por varias razones entre ellas que la votacion a la cual hace referencia ya haya finalizado. Escriba /vote para emitir su voto de nuevo en la votacion correcta o registrese nuevamente en su chat usando /register en el grupo origen de la discusion.'
+#Vote Callback helpers
+AADD = 1
+AREM = 2
+ACAN = 3
+ACOM = 4
+
+VOTE_SEL_REGEX = r'VOTESEL\*(.+)\*$'
+VOTE_SEL_PATTERN = 'VOTESEL*%s*'
+VOTE_REGEX = r'VOTE\*(.+)\*$'
+VOTE_PATTERN = 'VOTE*%s*'
+
+def vote_parse_cdata(cdata):
+    idx, typex, option = re.findall('^(.+):([1|2|3|4]):(.*)$', cdata)[0]
+    return int(idx), int(typex), option
+
+def vote_build_cdata(chat_id, option, typex):
+    return VOTE_PATTERN%(f'{chat_id}:{typex}:{option}')
+
+def vote_parse_selected(data: str):
+    parts = data.split(':')
+    if len(parts) > 1:
+        result = re.findall('([0-9]+) - (.*)', parts[-1])
+        return [ op for _, op in result ]
+    return []
 
 
 def vote_register(update, context):
