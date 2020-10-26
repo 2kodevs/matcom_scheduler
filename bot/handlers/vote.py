@@ -10,6 +10,7 @@ VOTE_SEL_PATTERN = 'VOTESEL*%s*'
 VOTE_REGEX = r'VOTE\*(.+)\*$'
 VOTE_PATTERN = 'VOTE*%s*'
 NO_ACTIVE = 'No hay una discusion activa en este grupo.'
+NO_FREE = 'No quedan discusiones libres para votar. Recuerde finalizar las votaciones que ha iniciado.'
 NO_REGISTER = 'No encontramos ninguna discusion a la que se haya registrado. Escriba /register en el grupo donde la discusion haya sido creada para registrarse.'
 NO_CONFIG = 'No se ha configurado completamente aun la discusion actual.'
 REGISTERED = 'Usted a sido registrado como votante. Escriba /vote por privado para emitir su voto.'
@@ -56,12 +57,16 @@ def vote_selection_handler(update, context):
         return
 
     keyboard = []
-    for chat in chats:
-        if chats[chat] is None:
-            keyboard.append([InlineKeyboardButton(context.bot.get_chat(chat).title, callback_data=VOTE_SEL_PATTERN%chat)])
 
-    update.effective_message.reply_text(START_SELECTION, reply_markup=InlineKeyboardMarkup(keyboard))
+    if any([chats[chat] is None for chat in chats]):
+        for chat in chats:
+            if chats[chat] is None:
+                keyboard.append([InlineKeyboardButton(context.bot.get_chat(chat).title, callback_data=VOTE_SEL_PATTERN%chat)])
 
+        update.effective_message.reply_text(START_SELECTION, reply_markup=InlineKeyboardMarkup(keyboard))
+
+    else:
+        update.effective_message.reply_text(NO_FREE)
 
 def vote_selection_callback(update, context):
     query = update.callback_query
