@@ -1,14 +1,12 @@
 import re
 
 from .filters import private_text_filter
-from .utils import clean_vote_data, is_chat_admin, get_or_init
-from telegram import InlineKeyboardMarkup, InlineKeyboardButton
+from .utils import clean_vote_data, get_or_init, build_cdata, parse_cdata, parse_selected,\
+    VOTE_PATTERN, VOTE_REGEX, VOTE_SEL_PATTERN, VOTE_SEL_REGEX,AADD, ACAN, ACOM, AREM
+from telegram import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
 from telegram.ext import CommandHandler, CallbackQueryHandler, Filters, MessageHandler
 
-VOTE_SEL_REGEX = r'VOTESEL\*(.+)\*$'
-VOTE_SEL_PATTERN = 'VOTESEL*%s*'
-VOTE_REGEX = r'VOTE\*(.+)\*$'
-VOTE_PATTERN = 'VOTE*%s*'
+
 NO_ACTIVE = 'No hay una discusion activa en este grupo.'
 NO_FREE = 'No quedan discusiones libres para votar. Recuerde finalizar las votaciones que ha iniciado.'
 NO_REGISTER = 'No encontramos ninguna discusion a la que se haya registrado. Escriba /register en el grupo donde la discusion haya sido creada para registrarse.'
@@ -21,18 +19,6 @@ CANCEL = 'Se ha cancelado su voto en la discusion de "%s". Escribe /vote de nuev
 CONFIRM = 'Su voto en la discusion de "%s" a sido guardado satisfactoriamente. Recuerde que puede volver a ejercer su voto escribiendo /vote aqui nuevamente. Su ultimo voto valido sera el considerado al finalizar la discusion.'
 INVALID = 'Su voto no se a podido emitir correctamente. Esto puede ocurrir por varias razones entre ellas que la votacion a la cual hace referencia ya haya finalizado. Escriba /vote para emitir su voto de nuevo en la votacion correcta.'
 
-#Callback helpers
-AADD = 1
-AREM = 2
-ACAN = 3
-ACOM = 4
-
-def parse_cdata(cdata):
-    idx, typex, option = re.findall('^(.+):([1|2|3|4]):(.*)$', cdata)[0]
-    return int(idx), int(typex), option
-
-def build_cdata(chat_id, option, typex):
-    return VOTE_PATTERN%(f'{chat_id}:{typex}:{option}')
 
 def vote_register(update, context):
     '''
