@@ -1,5 +1,5 @@
 from .filters import private_text_filter
-from .utils import clean_vote_data, is_chat_admin, get_or_init
+from .utils import is_chat_admin, get_or_init
 from telegram import ReplyKeyboardMarkup, ReplyKeyboardRemove
 from telegram.ext import CommandHandler, ConversationHandler, Filters, MessageHandler
 

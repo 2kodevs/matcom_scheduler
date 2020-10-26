@@ -104,7 +104,6 @@ def voting_callback(update, context):
         voters = get_or_init(context.dispatcher.chat_data[chat_id], 'voters', dict())
         user_id = update.effective_user.id
         voters[user_id] = selected
-        context.user_data['voting_in'][chat_id] = None
         query.edit_message_text(text=CONFIRM%chat_title)
         return
 
