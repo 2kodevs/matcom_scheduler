@@ -1,14 +1,13 @@
 import re
 
 from .filters import private_text_filter
-from .utils import clean_vote_data, get_or_init, build_cdata, parse_cdata, parse_selected,\
+from .utils import get_or_init, build_cdata, parse_cdata, parse_selected,\
     VOTE_PATTERN, VOTE_REGEX, VOTE_SEL_PATTERN, VOTE_SEL_REGEX,AADD, ACAN, ACOM, AREM
 from telegram import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
 from telegram.ext import CommandHandler, CallbackQueryHandler, Filters, MessageHandler
 
 
 NO_ACTIVE = 'No hay una discusion activa en este grupo.'
-NO_FREE = 'No quedan discusiones libres para votar. Recuerde finalizar las votaciones que ha iniciado.'
 NO_REGISTER = 'No encontramos ninguna discusion a la que se haya registrado. Escriba /register en el grupo donde la discusion haya sido creada para registrarse.'
 NO_CONFIG = 'No se ha configurado completamente aun la discusion actual.'
 REGISTERED = 'Usted a sido registrado como votante. Escriba /vote por privado para emitir su voto.'
@@ -17,7 +16,7 @@ VOTING_IN = 'Usted esta votando en la discusion del grupo "%s". Marque en las op
 VOTING_IN_WHIT_STATE = VOTING_IN + '\n\nSu voto actual es:\n%s'
 CANCEL = 'Se ha cancelado su voto en la discusion de "%s". Escribe /vote de nuevo para iniciar otra votacion.'
 CONFIRM = 'Su voto en la discusion de "%s" a sido guardado satisfactoriamente. Recuerde que puede volver a ejercer su voto escribiendo /vote aqui nuevamente. Su ultimo voto valido sera el considerado al finalizar la discusion.'
-INVALID = 'Su voto no se a podido emitir correctamente. Esto puede ocurrir por varias razones entre ellas que la votacion a la cual hace referencia ya haya finalizado. Escriba /vote para emitir su voto de nuevo en la votacion correcta.'
+INVALID = 'Su voto no se a podido emitir correctamente. Esto puede ocurrir por varias razones entre ellas que la votacion a la cual hace referencia ya haya finalizado. Escriba /vote para emitir su voto de nuevo en la votacion correcta o registrese nuevamente en su chat usando /register en el grupo origen de la discusion.'
 
 
 def vote_register(update, context):
@@ -29,38 +28,32 @@ def vote_register(update, context):
     try:
         assert context.chat_data.get('active'), NO_ACTIVE
         assert context.chat_data.get('options'), NO_CONFIG
-        voting = get_or_init(user_data, 'voting_in', dict())
-        voting[chat] = None
+        voting = get_or_init(user_data, 'voting_in', set())
+        voting.add(chat)
         assert False, REGISTERED
     except AssertionError as e:
         update.effective_message.reply_text(str(e))
 
 def vote_selection_handler(update, context):
     user_data = context.user_data
-    chats = user_data.get('voting_in', dict())
+    chats = user_data.get('voting_in', set())
     if not chats:
         update.effective_message.reply_text(NO_REGISTER)
         return
 
     keyboard = []
 
-    if any([chats[chat] is None for chat in chats]):
-        for chat in chats:
-            if chats[chat] is None:
-                keyboard.append([InlineKeyboardButton(context.bot.get_chat(chat).title, callback_data=VOTE_SEL_PATTERN%chat)])
+    for chat in chats:
+        keyboard.append([InlineKeyboardButton(context.bot.get_chat(chat).title, callback_data=VOTE_SEL_PATTERN%chat)])
 
-        update.effective_message.reply_text(START_SELECTION, reply_markup=InlineKeyboardMarkup(keyboard))
-
-    else:
-        update.effective_message.reply_text(NO_FREE)
-
+    update.effective_message.reply_text(START_SELECTION, reply_markup=InlineKeyboardMarkup(keyboard))
+    
 def vote_selection_callback(update, context):
     query = update.callback_query
     query.answer()
     chat_id = int(re.findall(VOTE_SEL_REGEX, query.data)[0])
     chat_title = context.bot.get_chat(chat_id).title
     options = context.dispatcher.chat_data[chat_id]['options']
-    context.user_data['voting_in'][chat_id] = []
     keyboard = []
     for option in options:
         cdata = build_cdata(chat_id, option, AADD)
@@ -73,10 +66,10 @@ def vote_selection_callback(update, context):
 
 
 def voting_callback(update, context):
-    query = update.callback_query
+    query: CallbackQuery = update.callback_query
     query.answer()
     chat_id, operation, option =  parse_cdata(re.findall(VOTE_REGEX, query.data)[0])
-    selected = context.user_data['voting_in'][chat_id]
+    selected = parse_selected(query.message.text)
     chat_title = context.bot.get_chat(chat_id).title
     
     if operation == AADD:
@@ -86,20 +79,24 @@ def voting_callback(update, context):
         try:
             selected.remove(option)
         except ValueError:
-            context.user_data['voting_in'][chat_id] = None
+            try:
+                context.user_data['voting_in'].remove(chat_id)
+            except KeyError:
+                pass
             query.edit_message_text(text=INVALID%chat_title)
             return
-    options = []
-    if 'options' in context.dispatcher.chat_data[chat_id]:
-        options = context.dispatcher.chat_data[chat_id]['options']
+
+    options = context.dispatcher.chat_data[chat_id].get('options', [])
     if any([not op in options for op in selected ]):
-        context.user_data['voting_in'][chat_id] = None
+        try:
+            context.user_data['voting_in'].remove(chat_id)
+        except KeyError:
+            pass
         query.edit_message_text(text=INVALID%chat_title)
         return
     left = [op for op in options if not op in selected]
 
     if operation == ACAN:
-        context.user_data['voting_in'][chat_id] = None
         query.edit_message_text(text=CANCEL%chat_title)
         return
 

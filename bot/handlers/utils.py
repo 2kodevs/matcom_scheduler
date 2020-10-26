@@ -19,12 +19,6 @@ def get_or_init(d: dict, key, default):
         result = d[key] = default
     return result
 
-def clean_vote_data(data):
-    try:
-        del data
-    except KeyError:
-        pass
-
 def clean_config_data(data):
     try:
         del data['chat_id']
