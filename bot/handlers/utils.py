@@ -49,3 +49,10 @@ def parse_cdata(cdata):
 
 def build_cdata(chat_id, option, typex):
     return VOTE_PATTERN%(f'{chat_id}:{typex}:{option}')
+
+def parse_selected(data: str):
+    parts = data.split(':')
+    if len(parts) > 1:
+        result = re.findall('([0-9]+) - (.*)', parts[-1])
+        return [ op for _, op in result ]
+    return []
