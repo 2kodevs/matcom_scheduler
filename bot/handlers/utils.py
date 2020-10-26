@@ -1,3 +1,6 @@
+import re
+
+
 def is_chat_admin(bot, chat_id, user_id):
     '''
     Check if the given user is
@@ -28,3 +31,21 @@ def clean_config_data(data):
         del data['options']
     except KeyError:
         pass
+
+#Vote Callback helpers
+AADD = 1
+AREM = 2
+ACAN = 3
+ACOM = 4
+
+VOTE_SEL_REGEX = r'VOTESEL\*(.+)\*$'
+VOTE_SEL_PATTERN = 'VOTESEL*%s*'
+VOTE_REGEX = r'VOTE\*(.+)\*$'
+VOTE_PATTERN = 'VOTE*%s*'
+
+def parse_cdata(cdata):
+    idx, typex, option = re.findall('^(.+):([1|2|3|4]):(.*)$', cdata)[0]
+    return int(idx), int(typex), option
+
+def build_cdata(chat_id, option, typex):
+    return VOTE_PATTERN%(f'{chat_id}:{typex}:{option}')
