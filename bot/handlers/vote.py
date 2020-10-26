@@ -15,7 +15,9 @@ VOTING_IN = 'Usted esta votando en la discusion del grupo "%s". Marque en las op
 VOTING_IN_WHIT_STATE = VOTING_IN + '\n\nSu voto actual es:\n%s'
 CANCEL = 'Se ha cancelado su voto en la discusion de "%s". Escribe /vote de nuevo para iniciar otra votacion.'
 CONFIRM = 'Su voto en la discusion de "%s" a sido guardado satisfactoriamente. Recuerde que puede volver a ejercer su voto escribiendo /vote aqui nuevamente. Su ultimo voto valido sera el considerado al finalizar la discusion.'
-INVALID = 'Su voto no se a podido emitir correctamente. Esto puede ocurrir por varias razones entre ellas que la votacion a la cual hace referencia ya haya finalizado. Escriba /vote para emitir su voto de nuevo en la votacion correcta o registrese nuevamente en su chat usando /register en el grupo origen de la discusion.'
+INVALID = 'Su voto en "%s" no se a podido emitir correctamente. Esto puede ocurrir por varias razones entre ellas que la votacion a la cual hace referencia ya haya finalizado. Escriba /vote para emitir su voto de nuevo en la votacion correcta o registrese nuevamente en su chat usando /register en el grupo origen de la discusion.'
+
+
 #Vote Callback helpers
 AADD = 1
 AREM = 2
@@ -40,6 +42,7 @@ def vote_parse_selected(data: str):
         result = re.findall('([0-9]+) - (.*)', parts[-1])
         return [ op for _, op in result ]
     return []
+
 
 
 def vote_register(update, context):
