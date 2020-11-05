@@ -15,6 +15,7 @@ def set_commands(bot):
         ('cancel'   , 'Cancela la acción realizada.'),
         ('start'    , 'Iniciar el bot.'),
         ('help'     , 'Muestra la ayuda.'),
+        ('list'     , 'Lista los usuarios que han votado.'),
     ])
 
 class Scheduler_Bot:
