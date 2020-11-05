@@ -1,7 +1,5 @@
-from .filters import private_text_filter
-from .utils import is_chat_admin, get_or_init
-from telegram import ReplyKeyboardMarkup, ReplyKeyboardRemove
-from telegram.ext import CommandHandler, ConversationHandler, Filters, MessageHandler
+from .utils import is_chat_admin
+from telegram.ext import CommandHandler, Filters
 
 # Messages
 ADMINS_ONLY     = 'Only admins can use this command, sorry :('
