@@ -28,8 +28,10 @@ def clean_config_data(data):
 
 def clear_chat(chat, context):
     context.chat_data['active'] = False
-    if context.user_data.get('owner'):
-        context.user_data['owner'] = [x for x in context.user_data['owner'] if x != chat]
+    manager = context.chat_data['manager']
+    manager_data = context.dispatcher.user_data[manager]
+    if manager_data.get('owner'):
+        manager_data['owner'] = [x for x in context.user_data['owner'] if x != chat]
     if context.chat_data.get('voters'):
         users_data = context.dispatcher.user_data
         for idx in context.chat_data['voters'].keys():
