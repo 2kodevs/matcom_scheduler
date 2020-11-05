@@ -8,7 +8,7 @@ from telegram.ext import CommandHandler, CallbackQueryHandler, Filters, MessageH
 
 NO_ACTIVE = 'No hay una discusión activa en este grupo.'
 NO_REGISTER = 'No encontramos ninguna discusión a la que se haya registrado. Escriba /register en el grupo donde la discusión haya sido creada para registrarse.'
-NO_CONFIG = 'No se ha configurado completamente aun la discusión actual.'
+NO_CONFIG = 'No se ha configurado completamente aún la discusión actual.'
 REGISTERED = 'Usted a sido registrado como votante. Escriba /vote por privado para emitir su voto.'
 START_SELECTION = 'Por favor escoja en que discusión desea participar:'
 VOTING_IN = 'Usted está votando en la discusión del grupo "%s". Marque en las opciones para agregar al final o eliminar la opción seleccionada. Marque cancelar para finalizar su voto. Una vez seleccionadas todas las opciones marque finalizar para emitir su voto.'
@@ -56,6 +56,9 @@ def vote_register(update, context):
         assert context.chat_data.get('options'), NO_CONFIG
         voting = get_or_init(user_data, 'voting_in', set())
         voting.add(chat)
+        voters = get_or_init(context.chat_data, 'voters', dict())
+        user_id = update.effective_user.id
+        voters[user_id] = None
         assert False, REGISTERED
     except AssertionError as e:
         update.effective_message.reply_text(str(e))
