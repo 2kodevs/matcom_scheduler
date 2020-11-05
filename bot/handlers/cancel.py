@@ -4,7 +4,7 @@ from telegram.ext import CommandHandler, Filters
 # Messages
 ADMINS_ONLY     = 'Ups!!!, solo los administradores pueden usar este comando :('
 ACTIVE          = 'Para cancelar una discusión, primero se debe crear una usando /create'
-CANCELED        = 'Discusión cerrada satisfactoriamente '
+CANCELED        = 'Discusión cancelada satisfactoriamente '
 
 def cancel(update, context):
     user = update.effective_user.id
