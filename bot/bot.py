@@ -12,8 +12,8 @@ def set_commands(bot):
         ('config'   , 'Configura las opciones de la discución.'),
         ('vote'     , 'Toma parte en la discusión actual.'),
         ('close'    , 'Cierra la discusión actual.'),
-        ('cancel'   , 'Cancela la acción realizada.'),
-        ('start'    , 'Iniciar el bot.'),
+        ('cancel'   , 'Cancela la votación actual.'),
+        ('start'    , 'Inicia el bot.'),
         ('help'     , 'Muestra la ayuda.'),
         ('list'     , 'Lista los usuarios que han votado.'),
     ])
