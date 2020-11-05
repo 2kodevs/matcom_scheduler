@@ -1,4 +1,4 @@
-from model.utils import *
+from .utils import *
 
 def distance(data1:list, data2:list):
     '''

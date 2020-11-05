@@ -2,7 +2,7 @@ import logging
 
 from configparser import ConfigParser
 
-from bot import Scheduler_Bot
+from src.bot import Scheduler_Bot
 
 
 def main(args):
