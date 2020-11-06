@@ -14,7 +14,7 @@ def close(update, context):
     try:
         assert is_chat_admin(context.bot, chat, user), ADMINS_ONLY
         assert context.chat_data.get('active'), ACTIVE
-        assert context.chat_data.get('voters'), NO_VOTES
+        assert any(context.chat_data.get('voters', dict()).values()), NO_VOTES
 
         votes = context.chat_data['voters'].values()
         solution = solve(votes)
