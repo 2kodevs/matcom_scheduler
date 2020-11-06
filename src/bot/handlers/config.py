@@ -1,5 +1,5 @@
-from .utils import clean_config_data
 from .filters import private_text_filter
+from .utils import clean_config_data, enumerate_options
 from telegram import ReplyKeyboardMarkup, ReplyKeyboardRemove
 from telegram.ext import CommandHandler, Filters, ConversationHandler, MessageHandler
 
@@ -123,7 +123,7 @@ def done_command(update, context):
         context.dispatcher.chat_data[chat_id]['options'] = options
         idx = context.user_data['owner'].index(chat_id)
         context.user_data['owner'].pop(idx)
-        text = '\n'.join(f'{i + 1}-) {op}' for i, op in enumerate(options))
+        text = enumerate_options(options)
         context.bot.send_message(chat_id, INIT_DISCUSS % (text))
     clean_config_data(context.user_data)
     return ConversationHandler.END    
