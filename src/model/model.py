@@ -1,4 +1,4 @@
-from model.utils import *
+from .utils import *
 
 def distance(data1:list, data2:list):
     '''
@@ -53,7 +53,7 @@ def solve(data):
     '''
     if not data:
         return None
-    dis = len(data) ** 2
+    dis = float('inf')
     best = data[0].copy()
     best.sort()
     cur = best.copy()
