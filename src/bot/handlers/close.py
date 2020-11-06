@@ -16,7 +16,7 @@ def close(update, context):
         assert context.chat_data.get('active'), ACTIVE
         assert any(context.chat_data.get('voters', dict()).values()), NO_VOTES
 
-        votes = context.chat_data['voters'].values()
+        votes = list(context.chat_data['voters'].values())
         solution = solve(votes)
         sol_msg = 'Los resultados de la votación son: \n'
         sol_msg += '\n'.join([f'{idx + 1}-) {opt}' for idx, opt in enumerate(solution)])
