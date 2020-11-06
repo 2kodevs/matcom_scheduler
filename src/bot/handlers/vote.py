@@ -43,8 +43,6 @@ def vote_parse_selected(data: str):
         return [ op for _, op in result ]
     return []
 
-
-
 def vote_register(update, context):
     '''
     Handler for /vote and /register command
@@ -58,7 +56,8 @@ def vote_register(update, context):
         voting.add(chat)
         voters = get_or_init(context.chat_data, 'voters', dict())
         user_id = update.effective_user.id
-        voters[user_id] = None
+        if not user_id in voters:
+            voters[user_id] = None
         assert False, REGISTERED
     except AssertionError as e:
         update.effective_message.reply_text(str(e))
@@ -92,7 +91,6 @@ def vote_selection_callback(update, context):
 
     query.edit_message_text(text=VOTING_IN%chat_title)
     query.edit_message_reply_markup(reply_markup=InlineKeyboardMarkup(keyboard))
-
 
 def voting_callback(update, context):
     query: CallbackQuery = update.callback_query
