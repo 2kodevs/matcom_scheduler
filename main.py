@@ -21,13 +21,20 @@ def main(args):
     else:
         raise Exception(f'Invalid or missing "token" in {args.config}')
     
+def heroku(args): pass
 
 if __name__ == '__main__':
     import argparse
 
     parser = argparse.ArgumentParser(description='Bot initializer')
+    parser.set_defaults(command=main)
+
     parser.add_argument('-c', '--config', type=str, default='config.ini', help='path of the configuration file')
     parser.add_argument('--debug', help='execute in debug mode', action="store_true")
 
+    subparsers = parser.add_subparsers()
+    heroku_parser = subparsers.add_parser('heroku', help="Run a bot instance using heroku")
+    heroku_parser.set_defaults(command=heroku)
+
     args = parser.parse_args()
-    main(args)
+    args.command(args)
