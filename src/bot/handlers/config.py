@@ -11,6 +11,7 @@ WRONG_CHAT      = "Usted no tiene acceso a la configuración del chat que selecc
 INVALID_OPTION  = "Ha seleciona una opción desconocida"
 EMPTY           = "La lista de opciones esta vacia"
 CHOOSE_DEL      = 'Selecione las opciones a eliminar una por una'
+CHOOSE_ADD      = 'Continue añadiendo opciones'
 USELESS         = "Su configuración ha fallado, utilice /config nuevamente y añada algunas opciones cuando este listo."
 DONE_CONFIG     = 'Perfecto! Ha terminado la configuración.\nUtilice /close en el chat relacionado para cerrar la discusión. Si necesita hacer algun cambio debe utilizar /cancel en el chat para cancelar la discusión y repetir el procedimiento para la nueva configuración.'
 INIT_DISCUSS    = 'Comienza la votación!!!\nUtiliza /vote para participar.\n\nLas opciones a organizar son:\n%s'
@@ -71,7 +72,7 @@ def del_options(update, context):
     if not context.user_data.get('options'):
         update.effective_user.send_message(EMPTY)
         update.effective_user.send_message(
-            OPTIONS, 
+            CHOOSE_ADD, 
             reply_markup=ReplyKeyboardRemove(),
         )
         return ADD_STATE
@@ -85,7 +86,7 @@ def del_options(update, context):
 
 def add_command(update, context):
     update.effective_message.reply_text(
-        OPTIONS,
+        CHOOSE_ADD,
         reply_markup=ReplyKeyboardRemove(),
     )
     return ADD_STATE
@@ -94,7 +95,7 @@ def del_command(update, context):
     if not context.user_data.get('options'):
         update.effective_user.send_message(EMPTY)
         update.effective_user.send_message(
-            OPTIONS, 
+            CHOOSE_ADD, 
             reply_markup=ReplyKeyboardRemove(),
         )
         return ADD_STATE
@@ -120,8 +121,7 @@ def done_command(update, context):
         chat_id = context.user_data['chat_id']
         options = context.user_data['options']
         context.dispatcher.chat_data[chat_id]['options'] = options
-        idx = context.user_data['owner'].index(chat_id)
-        context.user_data['owner'].pop(idx)
+        context.user_data['owner'].remove(chat_id)
         text = enumerate_options(options)
         context.bot.send_message(chat_id, INIT_DISCUSS % (text))
     clean_config_data(context.user_data)
