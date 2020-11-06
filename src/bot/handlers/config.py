@@ -4,17 +4,17 @@ from telegram import ReplyKeyboardMarkup, ReplyKeyboardRemove
 from telegram.ext import CommandHandler, Filters, ConversationHandler, MessageHandler
 
 # Messages
-NO_CONFIG       = "You don't have any chat to configure.\nYou need to use /create command in some chat first."
-SELECT          = 'Select the chat that you want to configure'
-OPTIONS         = 'Start writing the options one by one.\nAdditionally you can use /del to delete some options, or /add to continue adding.\nUse /done at the end'
-WRONG_CHAT      = "You don't have any configuration active in the selected chat, sorry :(, try /config again."
-INVALID_OPTION  = "I don't have this option, select a valid one"
-EMPTY           = "You don't have options to delete"
-CHOOSE_DEL      = 'Choose the options to delete one by one'
-USELESS         = "You didn't provide any options, try /config again when you are ready"
-DONE_CONFIG     = 'Perfect! The options provided by you are not editable.\nType /close in the related chat in order to close the discussion'
-INIT_DISCUSS    = 'Time to vote!!!\nSend /vote to participate.\n\nThe options to organize are:\n%s'
-BYE             = 'See you soon.'
+NO_CONFIG       = "Usted no tiene ningun chat para configurar.\nNecesita usar el comando /create en algun chat."
+SELECT          = 'Seleccione el chat que desea configurar'
+OPTIONS         = 'Comience a escribir las opciones en mensajes separados cada una. Puede utilizar los siguientes 3 comandos auxiliares durante la configuración.\n- /del Para eliminar algunas opciones\n- /add Para continuar añadiendo opciones\n- /done Para gaurdar la configuración'
+WRONG_CHAT      = "Usted no tiene acceso a la configuración del chat que selecciono :(, utilice /config nuevamente y seleccione algun chat valido."
+INVALID_OPTION  = "Ha seleciona una opción desconocida"
+EMPTY           = "La lista de opciones esta vacia"
+CHOOSE_DEL      = 'Selecione las opciones a eliminar una por una'
+USELESS         = "Su configuración ha fallado, utilice /config nuevamente y añada algunas opciones cuando este listo."
+DONE_CONFIG     = 'Perfecto! Ha terminado la configuración.\nUtilice /close en el chat relacionado para cerrar la discusión. Si necesita hacer algun cambio debe utilizar /cancel en el chat para cancelar la discusión y repetir el procedimiento para la nueva configuración.'
+INIT_DISCUSS    = 'Comienza la votación!!!\nUtiliza /vote para participar.\n\nLas opciones a organizar son:\n%s'
+BYE             = 'Se ha cancelado la configuración'
 
 # States
 SELECT_STATE, ADD_STATE, DEL_STATE = range(3) 
@@ -58,7 +58,7 @@ def add_options(update, context):
     if not context.user_data.get('options'):
         context.user_data['options'] = []
     context.user_data['options'].append(option)
-    update.effective_message.reply_text("Added correctly.")
+    update.effective_message.reply_text("Añadido correctamente")
     return ADD_STATE
 
 def del_options(update, context):
@@ -77,7 +77,7 @@ def del_options(update, context):
         update.effective_message.reply_text(INVALID_OPTION)
         return DEL_STATE
     update.effective_message.reply_text(
-        "Deleted correctly.",
+        "Eliminado correctamente",
         reply_markup=ReplyKeyboardMarkup(
             [[op] for op in context.user_data['options']],
         ),
