@@ -6,7 +6,7 @@ from telegram.ext import CommandHandler, Filters, ConversationHandler, MessageHa
 # Messages
 NO_CONFIG       = "Usted no tiene ningun chat para configurar.\nNecesita usar el comando /create en algun chat."
 SELECT          = 'Seleccione el chat que desea configurar'
-OPTIONS         = 'Comience a escribir las opciones en mensajes separados cada una. Puede utilizar los siguientes 3 comandos auxiliares durante la configuración.\n- /del Para eliminar algunas opciones\n- /add Para continuar añadiendo opciones\n- /done Para gaurdar la configuración'
+OPTIONS         = 'Comience a escribir las opciones en mensajes separados cada una. Puede utilizar los siguientes 3 comandos auxiliares durante la configuración.\n- /del Para eliminar algunas opciones\n- /add Para continuar añadiendo opciones\n- /done Para guardar la configuración'
 WRONG_CHAT      = "Usted no tiene acceso a la configuración del chat que selecciono :(, utilice /config nuevamente y seleccione algun chat valido."
 INVALID_OPTION  = "Ha seleciona una opción desconocida"
 EMPTY           = "La lista de opciones esta vacia"
