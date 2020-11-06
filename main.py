@@ -1,9 +1,6 @@
 import logging
-
+from src import Scheduler_Bot
 from configparser import ConfigParser
-
-from src.bot import Scheduler_Bot
-
 
 def main(args):
     level = logging.DEBUG if args.debug else logging.INFO
