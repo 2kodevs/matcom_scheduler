@@ -1,7 +1,7 @@
 import re
 
 from .filters import private_text_filter
-from .utils import get_or_init
+from .utils import get_or_init, enumerate_options
 from telegram import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
 from telegram.ext import CommandHandler, CallbackQueryHandler, Filters, MessageHandler
 
@@ -14,7 +14,7 @@ START_SELECTION = 'Por favor escoja en que discusión desea participar:'
 VOTING_IN = 'Usted está votando en la discusión del grupo "%s". Marque en las opciones para agregar al final o eliminar la opción seleccionada. Marque cancelar para finalizar su voto. Una vez seleccionadas todas las opciones marque finalizar para emitir su voto.'
 VOTING_IN_WHIT_STATE = VOTING_IN + '\n\nSu voto actual es:\n%s'
 CANCEL = 'Se ha cancelado su voto en la discusión de "%s". Escribe /vote de nuevo para iniciar otra votación.'
-CONFIRM = 'Su voto en la discusión de "%s" a sido guardado satisfactoriamente. Recuerde que puede volver a ejercer su voto escribiendo /vote aquí nuevamente. Su último voto válido será el considerado al finalizar la discusión.'
+CONFIRM = 'Su voto en la discusión de "%s" a sido guardado satisfactoriamente. Recuerde que puede volver a ejercer su voto escribiendo /vote aquí nuevamente. Su último voto válido será el considerado al finalizar la discusión.\n\nSu voto actual es:\n%s'
 INVALID = 'Su voto en "%s" no se a podido emitir correctamente. Esto puede ocurrir por varias razones entre ellas que la votación a la cual hace referencia ya haya finalizado. Escriba /vote para emitir su voto de nuevo en la votación correcta o regístrese nuevamente en su chat usando /register en el grupo origen de la discusión.'
 
 
@@ -39,11 +39,9 @@ def vote_build_cdata(chat_id, option, typex):
 def vote_parse_selected(data: str):
     parts = data.split(':')
     if len(parts) > 1:
-        result = re.findall('([0-9]+) - (.*)', parts[-1])
+        result = re.findall('([0-9]+)-\) (.*)', parts[-1])
         return [ op for _, op in result ]
     return []
-
-
 
 def vote_register(update, context):
     '''
@@ -58,7 +56,8 @@ def vote_register(update, context):
         voting.add(chat)
         voters = get_or_init(context.chat_data, 'voters', dict())
         user_id = update.effective_user.id
-        voters[user_id] = None
+        if not user_id in voters:
+            voters[user_id] = None
         assert False, REGISTERED
     except AssertionError as e:
         update.effective_message.reply_text(str(e))
@@ -92,7 +91,6 @@ def vote_selection_callback(update, context):
 
     query.edit_message_text(text=VOTING_IN%chat_title)
     query.edit_message_reply_markup(reply_markup=InlineKeyboardMarkup(keyboard))
-
 
 def voting_callback(update, context):
     query: CallbackQuery = update.callback_query
@@ -133,7 +131,7 @@ def voting_callback(update, context):
         voters = get_or_init(context.dispatcher.chat_data[chat_id], 'voters', dict())
         user_id = update.effective_user.id
         voters[user_id] = selected
-        query.edit_message_text(text=CONFIRM%chat_title)
+        query.edit_message_text(text=CONFIRM%(chat_title, enumerate_options(selected)))
         return
 
     keyboard = []
@@ -148,7 +146,7 @@ def voting_callback(update, context):
     
     keyboard.append([InlineKeyboardButton('Cancelar', callback_data=vote_build_cdata(chat_id, '', ACAN))] + ([] if left else [InlineKeyboardButton('Confirmar', callback_data=vote_build_cdata(chat_id, '', ACOM))]))
 
-    state = '\n'.join([ f'{idx+1} - {option}' for idx, option in enumerate(selected) ])
+    state = enumerate_options(selected)
     msg = VOTING_IN_WHIT_STATE%(chat_title, state) if selected else VOTING_IN%chat_title
 
     query.edit_message_text(text=msg)

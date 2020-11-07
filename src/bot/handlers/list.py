@@ -1,7 +1,7 @@
 import re
 
 from .filters import private_text_filter
-from .utils import get_or_init
+from .utils import get_or_init, enumerate_options
 from telegram import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
 from telegram.ext import CommandHandler, CallbackQueryHandler, Filters, MessageHandler
 
@@ -15,10 +15,10 @@ def list_group_voters(update, context):
     try:
         assert context.chat_data.get('active'), NO_ACTIVE
         assert context.chat_data.get('options'), NO_CONFIG
-        assert context.chat_data.get('voters'), NO_VOTERS
+        assert any(context.chat_data.get('voters', dict()).values()), NO_VOTERS
         voters:dict = context.chat_data['voters']
-        get_user_name = lambda idx, vote: context.bot.get_chat(idx).username
-        msg_list = '\n'.join([ f'@{get_user_name(voter, vote)}' for voter, vote in voters.items() if vote])
+        get_user_name = lambda idx: update.effective_chat.get_member(idx).user.full_name
+        msg_list = enumerate_options([f'{get_user_name(voter)}' for voter, vote in voters.items() if vote])
         assert False, LIST%msg_list
     except AssertionError as e:
         update.effective_message.reply_text(str(e))

@@ -1,20 +1,21 @@
-from .utils import clean_config_data
 from .filters import private_text_filter
+from .utils import clean_config_data, enumerate_options
 from telegram import ReplyKeyboardMarkup, ReplyKeyboardRemove
 from telegram.ext import CommandHandler, Filters, ConversationHandler, MessageHandler
 
 # Messages
-NO_CONFIG       = "You don't have any chat to configure.\nYou need to use /create command in some chat first."
-SELECT          = 'Select the chat that you want to configure'
-OPTIONS         = 'Start writing the options one by one.\nAdditionally you can use /del to delete some options, or /add to continue adding.\nUse /done at the end'
-WRONG_CHAT      = "You don't have any configuration active in the selected chat, sorry :(, try /config again."
-INVALID_OPTION  = "I don't have this option, select a valid one"
-EMPTY           = "You don't have options to delete"
-CHOOSE_DEL      = 'Choose the options to delete one by one'
-USELESS         = "You didn't provide any options, try /config again when you are ready"
-DONE_CONFIG     = 'Perfect! The options provided by you are not editable.\nType /close in the related chat in order to close the discussion'
-INIT_DISCUSS    = 'Time to vote!!!\nSend /vote to participate.\n\nThe options to organize are:\n%s'
-BYE             = 'See you soon.'
+NO_CONFIG       = "Usted no tiene ningun chat para configurar.\nNecesita usar el comando /create en algun chat."
+SELECT          = 'Seleccione el chat que desea configurar'
+OPTIONS         = 'Comience a escribir las opciones en mensajes separados cada una. Puede utilizar los siguientes 3 comandos auxiliares durante la configuración.\n- /del Para eliminar algunas opciones\n- /add Para continuar añadiendo opciones\n- /done Para guardar la configuración'
+WRONG_CHAT      = "Usted no tiene acceso a la configuración del chat que selecciono :(, utilice /config nuevamente y seleccione algun chat valido."
+INVALID_OPTION  = "Ha seleciona una opción desconocida"
+EMPTY           = "La lista de opciones esta vacia"
+CHOOSE_DEL      = 'Selecione las opciones a eliminar una por una'
+CHOOSE_ADD      = 'Continue añadiendo opciones'
+USELESS         = "Su configuración ha fallado, utilice /config nuevamente y añada algunas opciones cuando este listo."
+DONE_CONFIG     = 'Perfecto! Ha terminado la configuración.\nUtilice /close en el chat relacionado para cerrar la discusión. Si necesita hacer algun cambio debe utilizar /cancel en el chat para cancelar la discusión y repetir el procedimiento para la nueva configuración.'
+INIT_DISCUSS    = 'Comienza la votación!!!\nUtiliza /vote para participar.\n\nLas opciones a organizar son:\n%s'
+BYE             = 'Se ha cancelado la configuración'
 
 # States
 SELECT_STATE, ADD_STATE, DEL_STATE = range(3) 
@@ -58,26 +59,25 @@ def add_options(update, context):
     if not context.user_data.get('options'):
         context.user_data['options'] = []
     context.user_data['options'].append(option)
-    update.effective_message.reply_text("Added correctly.")
+    update.effective_message.reply_text("Añadido correctamente")
     return ADD_STATE
 
 def del_options(update, context):
     option = update.effective_message.text
-    if not context.user_data.get('options'):
-        update.effective_user.send_message(EMPTY)
-        update.effective_user.send_message(
-            OPTIONS, 
-            reply_markup=ReplyKeyboardRemove(),
-        )
-        return ADD_STATE
     try:
-        idx = context.user_data['options'].index(option)
-        context.user_data['options'].pop(idx)
+        idx = context.user_data['options'].remove(option)
     except ValueError:
         update.effective_message.reply_text(INVALID_OPTION)
         return DEL_STATE
+    if not context.user_data.get('options'):
+        update.effective_user.send_message(EMPTY)
+        update.effective_user.send_message(
+            CHOOSE_ADD, 
+            reply_markup=ReplyKeyboardRemove(),
+        )
+        return ADD_STATE
     update.effective_message.reply_text(
-        "Deleted correctly.",
+        "Eliminado correctamente",
         reply_markup=ReplyKeyboardMarkup(
             [[op] for op in context.user_data['options']],
         ),
@@ -86,7 +86,7 @@ def del_options(update, context):
 
 def add_command(update, context):
     update.effective_message.reply_text(
-        OPTIONS,
+        CHOOSE_ADD,
         reply_markup=ReplyKeyboardRemove(),
     )
     return ADD_STATE
@@ -95,7 +95,7 @@ def del_command(update, context):
     if not context.user_data.get('options'):
         update.effective_user.send_message(EMPTY)
         update.effective_user.send_message(
-            OPTIONS, 
+            CHOOSE_ADD, 
             reply_markup=ReplyKeyboardRemove(),
         )
         return ADD_STATE
@@ -121,9 +121,8 @@ def done_command(update, context):
         chat_id = context.user_data['chat_id']
         options = context.user_data['options']
         context.dispatcher.chat_data[chat_id]['options'] = options
-        idx = context.user_data['owner'].index(chat_id)
-        context.user_data['owner'].pop(idx)
-        text = '\n'.join(f'{i + 1}-) {op}' for i, op in enumerate(options))
+        context.user_data['owner'].remove(chat_id)
+        text = enumerate_options(options)
         context.bot.send_message(chat_id, INIT_DISCUSS % (text))
     clean_config_data(context.user_data)
     return ConversationHandler.END    
