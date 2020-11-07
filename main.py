@@ -23,21 +23,25 @@ def main(args):
 def heroku(args):
     import os
 
-    NAME = os.getenv('NAME')
-    PORT = os.getenv('PORT')
-    TOKEN = os.getenv('TOKEN')
-
     level = logging.DEBUG if args.debug else logging.INFO
 
     logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=level)
     logger = logging.getLogger(__name__)
 
+    logger.log(logging.INFO, 'Loading env vars...')
+    NAME = os.getenv('NAME')
+    PORT = os.getenv('PORT')
+    TOKEN = os.getenv('TOKEN')
+    logger.log(logging.INFO, 'Vars loaded')
+
     scheduler = Scheduler_Bot(TOKEN)
     updater = scheduler.updater
 
+    logger.log(logging.INFO, 'Setting up webhooks')
     updater.start_webhook(listen='0.0.0.0', port=int(PORT), url_path=TOKEN)
     updater.bot.set_webhook('https://%s.herokuapp.com/%s' % (NAME, TOKEN))
 
+    logger.log(logging.INFO, 'Start idle bot')
     updater.idle()
 
 if __name__ == '__main__':
