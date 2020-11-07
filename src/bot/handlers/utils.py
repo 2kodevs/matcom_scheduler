@@ -40,3 +40,6 @@ def clear_chat(chat, context):
     if context.chat_data.get('options'):
         del context.chat_data['options']
     del context.chat_data['manager']
+
+def enumerate_options(options):
+    return '\n'.join(f'{i + 1}-) {op}' for i, op in enumerate(options))
