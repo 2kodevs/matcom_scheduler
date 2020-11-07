@@ -16,12 +16,29 @@ def main(args):
     token = config.get('bot', 'token', fallback=None)
     if token:
         bot = Scheduler_Bot(token)
-        
         bot.run()
     else:
         raise Exception(f'Invalid or missing "token" in {args.config}')
-    
-def heroku(args): pass
+
+def heroku(args):
+    import os
+
+    NAME = os.getenv('NAME')
+    PORT = os.getenv('PORT')
+    TOKEN = os.getenv('TOKEN')
+
+    level = logging.DEBUG if args.debug else logging.INFO
+
+    logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=level)
+    logger = logging.getLogger(__name__)
+
+    scheduler = Scheduler_Bot(TOKEN)
+    updater = scheduler.updater
+
+    updater.start_webhook(listen='0.0.0.0', port=int(PORT), url_path=TOKEN)
+    updater.bot.set_webhook('https://%s.herokuapp.com/%s' % (NAME, TOKEN))
+
+    updater.idle()
 
 if __name__ == '__main__':
     import argparse
