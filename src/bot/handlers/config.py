@@ -4,16 +4,16 @@ from telegram import ReplyKeyboardMarkup, ReplyKeyboardRemove
 from telegram.ext import CommandHandler, Filters, ConversationHandler, MessageHandler
 
 # Messages
-NO_CONFIG       = "Usted no tiene ningun chat para configurar.\nNecesita usar el comando /create en algun chat."
+NO_CONFIG       = "Usted no tiene ningún chat para configurar.\nNecesita usar el comando /create en algún chat."
 SELECT          = 'Seleccione el chat que desea configurar'
 OPTIONS         = 'Comience a escribir las opciones en mensajes separados cada una. Puede utilizar los siguientes 3 comandos auxiliares durante la configuración.\n- /del Para eliminar algunas opciones\n- /add Para continuar añadiendo opciones\n- /done Para guardar la configuración'
-WRONG_CHAT      = "Usted no tiene acceso a la configuración del chat que selecciono :(, utilice /config nuevamente y seleccione algun chat valido."
-INVALID_OPTION  = "Ha seleciona una opción desconocida"
-EMPTY           = "La lista de opciones esta vacia"
+WRONG_CHAT      = "Usted no tiene acceso a la configuración del chat que seleccionó :(, utilice /config nuevamente y seleccione algún chat válido."
+INVALID_OPTION  = "Ha selecionado una opción desconocida"
+EMPTY           = "La lista de opciones está vacía"
 CHOOSE_DEL      = 'Selecione las opciones a eliminar una por una'
 CHOOSE_ADD      = 'Continue añadiendo opciones'
-USELESS         = "Su configuración ha fallado, utilice /config nuevamente y añada algunas opciones cuando este listo."
-DONE_CONFIG     = 'Perfecto! Ha terminado la configuración.\nUtilice /close en el chat relacionado para cerrar la discusión. Si necesita hacer algun cambio debe utilizar /cancel en el chat para cancelar la discusión y repetir el procedimiento para la nueva configuración.'
+USELESS         = "Su configuración ha fallado, utilice /config nuevamente y añada algunas opciones cuando esté listo."
+DONE_CONFIG     = 'Perfecto! Ha terminado la configuración.\nUtilice /close en el chat relacionado para cerrar la discusión. Si necesita hacer algún cambio debe utilizar /cancel en el chat para cancelar la discusión y repetir el procedimiento para la nueva configuración.'
 INIT_DISCUSS    = 'Comienza la votación!!!\nUtiliza /vote para participar.\n\nLas opciones a organizar son:\n%s'
 BYE             = 'Se ha cancelado la configuración'
 
