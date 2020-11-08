@@ -1,4 +1,4 @@
-from ...model import solve
+from ...model import use_model
 from telegram.ext import CommandHandler, Filters
 from .utils import is_chat_admin, clear_chat, enumerate_options
 
@@ -17,7 +17,7 @@ def close(update, context):
         assert any(context.chat_data.get('voters', dict()).values()), NO_VOTES
 
         votes = [v for v in context.chat_data['voters'].values() if v]
-        solution = solve(votes)
+        solution = use_model('positions', votes)
         sol_msg = 'Los resultados de la votación son: \n'
         sol_msg += enumerate_options(solution)
         context.bot.send_message(chat_id=chat, text=sol_msg)
