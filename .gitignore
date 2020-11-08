@@ -1,5 +1,6 @@
 # Project files
 *config.ini
+*.data
 *.session
 
 # VSCode config folder
