@@ -145,5 +145,7 @@ config_handler = ConversationHandler(
         CommandHandler('add', add_command, Filters.private),
         CommandHandler('del', del_command, Filters.private),
         CommandHandler('done', done_command, Filters.private),
-    ]
+    ],
+    persistent=True,
+    name='config_handler'
 )

@@ -1,6 +1,6 @@
 import logging
 
-from telegram.ext import Updater
+from telegram.ext import Updater, PicklePersistence
 
 from .handlers import bot_handlers
 
@@ -24,7 +24,9 @@ class Scheduler_Bot:
 
         logger.log(logging.INFO, 'Setting up bot...')
 
-        self.updater = Updater(self.token, use_context=True)
+        persistance = PicklePersistence('scheduler.data')
+
+        self.updater = Updater(self.token, persistence=persistance, use_context=True)
         dispatcher = self.updater.dispatcher
 
         logger.log(logging.INFO, 'Adding handlers...')
