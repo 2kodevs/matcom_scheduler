@@ -17,8 +17,8 @@ def close(update, context):
         assert any(context.chat_data.get('voters', dict()).values()), NO_VOTES
 
         votes = [v for v in context.chat_data['voters'].values() if v]
-        model = context.chat_data.get('model', 'positions')
-        solution = use_model(model, votes)
+        model = context.chat_data.get('model')
+        solution = use_model(votes, model)
         sol_msg = 'Los resultados de la votación son: \n'
         sol_msg += enumerate_options(solution)
         context.bot.send_message(chat_id=chat, text=sol_msg)
