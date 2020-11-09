@@ -4,7 +4,7 @@ class Positions(BaseModel):
     '''Busca el calendario que mínimice los cambios de orden entre las propuestas.'''
     def distance(self, calendar1:list, calendar2:list):
         '''
-        Return the number of iversions
+        Return the number of inversions
         necessary to transform calendar1 in calendar2
         <param> calendar1 - list of data
         <param> calendar2 - list of data
@@ -21,4 +21,3 @@ class Positions(BaseModel):
 
     def merge(self, d1, d2):
         return d1 + d2
-
