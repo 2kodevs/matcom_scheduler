@@ -5,13 +5,13 @@ from .utils import is_chat_admin
 from telegram.ext import CommandHandler, MessageHandler, Filters
 
 
-SET_MODEL_REGEX = r'^/set_(\w+)'
-LIST_MESSAGE = 'Los modelos son las diferentes formas que el bot usa para determinar cual es el calendario resultante de una votación. La lista de modelos disponibles ahora mismo es:\n\n %s \n\n Actualmente se encuentra seleccionado el modelo: %s.'
+SET_MODEL_REGEX = r'^/set(\w+)'
+LIST_MESSAGE = 'Los modelos son las diferentes formas que el bot usa para determinar cual es el calendario resultante de una votación.\n\nLa lista de modelos disponibles ahora mismo es:\n %s \n\n Actualmente se encuentra seleccionado el modelo: %s.'
 
 def build_option(model):
     name = model.__name__
-    doc = model.__doc__.replace('\n', '')
-    return f' {name}: {doc}\nUse /set_{name.lower()} para utilzar este modelo.'
+    doc = model.__doc__
+    return f'- {name} /set{name}:\n {doc}'
 
 def list_models(update, context):
     """
@@ -32,7 +32,7 @@ ACCEPT      = 'El modelo a utilizar a sido cambiado satisfactoriamente. Use /mod
 
 def set_model(update, context):
     """
-    Handle for /set_<model>
+    Handle for /set<model>
 
     Set chat current used model to <model>
     """

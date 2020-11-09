@@ -1,10 +1,7 @@
 from .base import BaseModel
 
 class Positions(BaseModel):
-    '''
-    Busca el calendario que mínimice los
-    cambios de orden entre las propuestas
-    '''
+    '''Busca el calendario que mínimice los cambios de orden entre las propuestas.'''
     def distance(self, calendar1:list, calendar2:list):
         '''
         Return the number of iversions
