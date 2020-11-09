@@ -58,4 +58,4 @@ def set_model(update, context):
     
 
 list_models_handler = CommandHandler(['models', 'list_models'], list_models, filters=Filters.group)
-set_model_handler = MessageHandler(Filters.group & Filters.regex(SET_MODEL_REGEX), set_model)
+set_model_handler = MessageHandler(Filters.group & Filters.regex(SET_MODEL_REGEX) & Filters.command, set_model)
