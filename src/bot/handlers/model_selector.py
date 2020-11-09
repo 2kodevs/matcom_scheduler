@@ -28,7 +28,7 @@ def list_models(update, context):
 
 ADMINS_ONLY = 'Ups!!!, solo los administradores pueden usar este comando :('
 NO_VALID    = 'El modelo que intentó activar no es uno válido. Use /models para verificar cuales son los modelos disponibles.'
-ACCEPT      = 'El modelo a utilizar a sido cambiado satisfactoriamente. Use /models para saber mas acerca de los modelos.'
+ACCEPT      = 'El modelo a utilizar ha sido cambiado satisfactoriamente. Use /models para saber más acerca de los modelos.'
 
 def set_model(update, context):
     """
