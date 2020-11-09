@@ -10,8 +10,8 @@ LIST_MESSAGE = 'Los modelos son las diferentes formas que el bot usa para determ
 
 def build_option(model):
     name = model.__name__
-    doc = model.__doc__.replace('\n', ' ')
-    return f' {name}: {doc}'
+    doc = model.__doc__.replace('\n', '')
+    return f' {name}: {doc}\nUse /set_{name.lower()} para utilzar este modelo.'
 
 def list_models(update, context):
     """
