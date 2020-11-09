@@ -2,7 +2,7 @@ from .create import create_handler
 from .config import config_handler
 from .list import list_group_handler
 from .vote import vote_register_handler, vote_select_handler, vote_select_callback, vote_callback
-from .start import start_handler
+from .start import start_group_handler, start_pv_handler
 from .cancel import cancel_handler
 from .close import close_handler
 
@@ -14,7 +14,8 @@ bot_handlers = [
     vote_select_handler,
     vote_select_callback,
     vote_callback,
-    start_handler,
+    start_group_handler,
+    start_pv_handler,
     cancel_handler,
     close_handler
 ]
