@@ -1,6 +1,6 @@
 import logging
 
-from telegram.ext import Updater
+from telegram.ext import Updater, PicklePersistence
 
 from .handlers import bot_handlers
 
@@ -8,14 +8,16 @@ logger = logging.getLogger(__name__)
 
 def set_commands(bot):
     bot.set_my_commands([
-        ('create'   , 'Crea una nueva discusión del calendario.'),
-        ('config'   , 'Configura las opciones de la discución.'),
-        ('vote'     , 'Toma parte en la discusión actual.'),
-        ('close'    , 'Cierra la discusión actual.'),
-        ('cancel'   , 'Cancela una acción en la configuración o la votación actual si se usa en el grupo.'),
-        ('start'    , 'Inicia el bot.'),
-        ('help'     , 'Muestra la ayuda.'),
-        ('list'     , 'Lista los usuarios que han votado.'),
+        ('create'      , 'Crea una nueva discusión del calendario.'),
+        ('config'      , 'Configura las opciones de la discución.'),
+        ('vote'        , 'Toma parte en la discusión actual.'),
+        ('close'       , 'Cierra la discusión actual.'),
+        ('cancel'      , 'Cancela una acción en la configuración o la votación actual si se usa en el grupo.'),
+        ('start'       , 'Inicia el bot.'),
+        ('help'        , 'Muestra la ayuda.'),
+        ('list'        , 'Lista los usuarios que han votado.'),
+        ('models'      , 'Lista los modelos disponibles para usar.'),
+        ('list_models'      , 'Lista los modelos disponibles para usar.'),
     ])
 
 class Scheduler_Bot:
@@ -24,7 +26,9 @@ class Scheduler_Bot:
 
         logger.log(logging.INFO, 'Setting up bot...')
 
-        self.updater = Updater(self.token, use_context=True)
+        persistance = PicklePersistence('scheduler.data')
+
+        self.updater = Updater(self.token, persistence=persistance, use_context=True)
         dispatcher = self.updater.dispatcher
 
         logger.log(logging.INFO, 'Adding handlers...')
