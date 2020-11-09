@@ -1,6 +1,6 @@
 from .base import ModelError
 from .model import Positions
-from .minumun import Minimum
+from .minimun import Minimum
 from .more_popular import MorePopular
 
 def use_model(data, model_name=None):
