@@ -1,6 +1,6 @@
 import re
 
-from ...model import models, default_model
+from ...model import models, default_model, use_model, ModelError
 from .utils import is_chat_admin
 from telegram.ext import CommandHandler, MessageHandler, Filters
 
@@ -40,12 +40,16 @@ def set_model(update, context):
     user = update.effective_user.id
     chat = update.effective_chat.id
     try:
-        selected_model = re.findall( SET_MODEL_REGEX,update.effective_message.text)[0]
+        selected_model = re.findall( SET_MODEL_REGEX, update.effective_message.text)[0]
     except:
         pass
     try:
         assert is_chat_admin(context.bot, chat, user), ADMINS_ONLY
-        assert not selected_model in [model.__name__ for model in models], NO_VALID
+        try:
+            use_model(None, selected_model)
+        except ModelError:
+            assert False, NO_VALID
+
         context.chat_data['model'] = selected_model
         assert False, ACCEPT
     except AssertionError as e:
