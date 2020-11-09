@@ -5,6 +5,7 @@ from .vote import vote_register_handler, vote_select_handler, vote_select_callba
 from .start import start_handler
 from .cancel import cancel_handler
 from .close import close_handler
+from .model_selector import list_models_handler
 
 bot_handlers = [
     create_handler, 
@@ -16,5 +17,6 @@ bot_handlers = [
     vote_callback,
     start_handler,
     cancel_handler,
-    close_handler
+    close_handler,
+    list_models_handler
 ]
