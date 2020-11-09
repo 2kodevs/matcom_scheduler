@@ -1,5 +1,7 @@
 from .base import ModelError
 from .model import Positions
+from .minimun import Minimum
+from .more_popular import MorePopular
 
 def use_model(data, model_name=None):
     '''
@@ -18,4 +20,6 @@ default_model = Positions.__name__
 
 models = [
     Positions,
+    Minimum,
+    MorePopular,
 ]
