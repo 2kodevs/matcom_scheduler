@@ -3,7 +3,7 @@ from .utils import is_chat_admin
 from telegram.ext import CommandHandler, Filters
 
 
-LIST_MESSAGE = 'Esta es la lista de módelos a usar para la selección del calendario:\n\n %s \n\n Actualmente se encuentra seleccionado el modelo: %s.'
+LIST_MESSAGE = 'Los modelos son las diferentes formas que el bot usa para determinar cual es el calendario resultante de una votación. La lista de modelos disponibles ahora mismo es:\n\n %s \n\n Actualmente se encuentra seleccionado el modelo: %s.'
 
 def list_models(update, context):
     """
@@ -12,7 +12,7 @@ def list_models(update, context):
     Show all available models for calendar selection.
     """
     try:
-        models_list = '\n'.join((f'{model.__name__}: "{model.__doc__}"' for model in models ))
+        models_list = '\n'.join((f'{model.__name__}: "{model.__doc__.replace('\n',' ')}"' for model in models ))
         actual_model = context.chat_data.get('model', default_model)
         assert False, LIST_MESSAGE%(models_list, actual_model)
     except AssertionError as e:
