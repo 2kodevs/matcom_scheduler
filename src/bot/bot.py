@@ -17,6 +17,7 @@ def set_commands(bot):
         ('help'        , 'Muestra la ayuda.'),
         ('list'        , 'Lista los usuarios que han votado.'),
         ('models'      , 'Lista los modelos disponibles para usar.'),
+        ('list_models'      , 'Lista los modelos disponibles para usar.'),
     ])
 
 class Scheduler_Bot:
