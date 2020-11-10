@@ -3,6 +3,9 @@
 run: ## Start the bot
 	@python main.py
 
+install: ## Install the project requirements
+	pip install -r requirements.txt
+
 debug: ## Start the bot in debug mode
 	@python main.py --debug
 
