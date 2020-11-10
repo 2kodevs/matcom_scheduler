@@ -36,6 +36,8 @@ commands_group = [
         ('close'    , 'Cierra la discusión actual.'),
         ('cancel'   , 'Cancela una acción en la configuración o la votación actual si se usa en el grupo.'),
         ('list'     , 'Lista los usuarios que han votado.'),
+        ('models'   , 'Lista los modelos disponibles para usar.'),
+        ('list_models' , 'Lista los modelos disponibles para usar.'),
         ('help'     , 'Muestra la ayuda.'),
     ]
 
