@@ -14,7 +14,7 @@ class BaseModel:
         '''
         Given a data set of option
         find the distribution that
-        minimice the value of f 
+        minimize the value of f 
         accordingly with the model 
         implementation
         '''
@@ -67,4 +67,3 @@ class BaseModel:
         Return a value that describes the difference between two calendars
         '''
         pass
-
