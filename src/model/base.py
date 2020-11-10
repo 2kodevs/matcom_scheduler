@@ -14,8 +14,9 @@ class BaseModel:
         '''
         Given a data set of option
         find the distribution that
-        minimice the sumatory of 
-        inversions with every option
+        minimize the value of f 
+        accordingly with the model 
+        implementation
         '''
         if not data:
             return None
@@ -66,4 +67,3 @@ class BaseModel:
         Return a value that describes the difference between two calendars
         '''
         pass
-
