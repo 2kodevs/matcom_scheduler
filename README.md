@@ -21,9 +21,9 @@ pyhton main.py --help
 ```
 
 ## Customization 🔧
-If you feel that the models are not fulfilling your excpectations, then you can read about how to create and use your own models in our [wiki](https://github.com/2kodevs/matcom_scheduler/wiki/adding-models).
+If you feel that the models are not fulfilling your excpectations, then you can read about how to create and use your own models in our [wiki](https://github.com/2kodevs/matcom_scheduler/wiki/Model).
 
-Also you can personalize your bot, and again to know how to do that we recommend you to read our [wiki](https://github.com/2kodevs/matcom_scheduler/wiki/Bot-Personalization).
+Also you can personalize your bot, and again to know how to do that we recommend you to read our [wiki](https://github.com/2kodevs/matcom_scheduler/wiki/Introduction-to-the-bot#handlers).
 
 ## Authors ✒️
 
