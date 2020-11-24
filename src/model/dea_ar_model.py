@@ -36,7 +36,7 @@ class DEA_AR(BaseModel):
 
         solved_data = []
         for element in data[0]:
-            # objetive funtion
+            # objetive function
             c = np.array([-x for x in yrj[element]])
 
             # current conditions
