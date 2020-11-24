@@ -17,11 +17,11 @@ def use_model(data, model_name=None):
     raise ModelError('Model not found')
 
 
-default_model = Positions.__name__
+default_model = DEA_AR.__name__
 
 models = [
+    DEA_AR,
     Positions,
     Minimum,
     MostPopular,
-    DEA_AR,
 ]
