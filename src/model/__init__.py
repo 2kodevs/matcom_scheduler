@@ -1,7 +1,8 @@
 from .base import ModelError
-from .model import Positions
+from .positions import Positions
 from .minimun import Minimum
-from .more_popular import MorePopular
+from .most_popular import MostPopular
+from .dea_ar_model import DEA_AR
 
 def use_model(data, model_name=None):
     '''
@@ -12,14 +13,15 @@ def use_model(data, model_name=None):
         model_name = default_model
     for model in models:
         if model.__name__.lower() == model_name.lower():
-            return model().solve(data)
+            return model()(data)
     raise ModelError('Model not found')
 
 
-default_model = Positions.__name__
+default_model = DEA_AR.__name__
 
 models = [
+    DEA_AR,
     Positions,
     Minimum,
-    MorePopular,
+    MostPopular,
 ]

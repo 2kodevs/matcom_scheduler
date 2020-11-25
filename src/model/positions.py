@@ -1,7 +1,8 @@
-from .base import BaseModel
+from .simple_model import SimpleModel
 
-class Positions(BaseModel):
+class Positions(SimpleModel):
     '''Busca el calendario que minimice los cambios de orden entre las propuestas.'''
+
     def distance(self, calendar1:list, calendar2:list):
         '''
         Return the number of inversions
