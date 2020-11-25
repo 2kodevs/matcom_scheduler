@@ -7,9 +7,6 @@ class DEA_AR(BaseModel):
     '''Busca el calendario más favorable según el modelo de exclusión DEA/AR(Data Envelopment Analysis/Assurance Region)'''
     
     def solve(self, data:list):
-        if not data:
-            return None
-
         t = len(data[0])
         e = 1 / t
         yrj = {element:[0]*t for element in data[0]}

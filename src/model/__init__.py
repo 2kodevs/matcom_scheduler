@@ -13,7 +13,7 @@ def use_model(data, model_name=None):
         model_name = default_model
     for model in models:
         if model.__name__.lower() == model_name.lower():
-            return model().solve(data)
+            return model()(data)
     raise ModelError('Model not found')
 
 

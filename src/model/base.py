@@ -10,6 +10,11 @@ class BaseModel:
     def __init__(self, null=0):
         self.null = null
 
+    def __call__(self, data:list):
+        if not data:
+            return None
+        return self.solve(data)
+
     def solve(self, data:list):
         '''
         Given a data set of option
@@ -18,8 +23,6 @@ class BaseModel:
         accordingly with the model 
         implementation
         '''
-        if not data:
-            return None
         dis, solution = float('inf'), None
         cur = data[0].copy()
         cur.sort()
