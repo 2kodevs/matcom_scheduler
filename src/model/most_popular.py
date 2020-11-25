@@ -1,6 +1,6 @@
-from .base import BaseModel
+from .simple_model import SimpleModel
 
-class MorePopular(BaseModel):
+class MostPopular(SimpleModel):
     '''Selecciona el calendario más popular'''
 
     def distance(self, calendar1, calendar2):

@@ -6,7 +6,7 @@ from telegram.ext import CommandHandler, Filters, ConversationHandler, MessageHa
 # Messages
 NO_CONFIG       = "Usted no tiene ningún chat para configurar.\nNecesita usar el comando /create en algún chat."
 SELECT          = 'Seleccione el chat que desea configurar'
-OPTIONS         = 'Comience a escribir las opciones en mensajes separados cada una. Puede utilizar los siguientes 3 comandos auxiliares durante la configuración.\n- /del Para eliminar algunas opciones\n- /add Para continuar añadiendo opciones\n- /done Para guardar la configuración'
+OPTIONS         = 'Comience a escribir las opciones en mensajes separados cada una. No repita opciones. Puede utilizar los siguientes 3 comandos auxiliares durante la configuración.\n- /del Para eliminar algunas opciones\n- /add Para continuar añadiendo opciones\n- /done Para guardar la configuración'
 WRONG_CHAT      = "Usted no tiene acceso a la configuración del chat que seleccionó :(, utilice /config nuevamente y seleccione algún chat válido."
 INVALID_OPTION  = "Ha seleccionado una opción desconocida"
 EMPTY           = "La lista de opciones está vacía"
@@ -57,16 +57,22 @@ def select(update, context):
 def add_options(update, context):
     option = update.effective_message.text
     if not context.user_data.get('options'):
-        context.user_data['options'] = []
-    context.user_data['options'].append(option)
-    update.effective_message.reply_text("Añadido correctamente")
+        context.user_data['options'] = set()
+    s = context.user_data['options']
+
+    sz = len(s)
+    s.add(option)
+    if sz == len(s):
+        update.effective_message.reply_text("La opción anterior ya fue añadida previamente")
+    else:
+        update.effective_message.reply_text("Añadido correctamente")
     return ADD_STATE
 
 def del_options(update, context):
     option = update.effective_message.text
     try:
         idx = context.user_data['options'].remove(option)
-    except ValueError:
+    except KeyError:
         update.effective_message.reply_text(INVALID_OPTION)
         return DEL_STATE
     if not context.user_data.get('options'):
@@ -120,7 +126,7 @@ def done_command(update, context):
         )
         chat_id = context.user_data['chat_id']
         options = context.user_data['options']
-        context.dispatcher.chat_data[chat_id]['options'] = options
+        context.dispatcher.chat_data[chat_id]['options'] = list(options)
         context.user_data['owner'].remove(chat_id)
         text = enumerate_options(options)
         context.bot.send_message(chat_id, INIT_DISCUSS % (text))
