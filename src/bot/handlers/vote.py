@@ -6,13 +6,13 @@ from telegram import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
 from telegram.ext import CommandHandler, CallbackQueryHandler, Filters, MessageHandler
 
 
-NO_ACTIVE = 'No hay una discusión activa en este grupo.'
-NO_REGISTER = 'No encontramos ninguna discusión a la que se haya registrado. Escriba /register en el grupo donde la discusión haya sido creada para registrarse.'
-NO_CONFIG = 'No se ha configurado completamente aún la discusión actual.'
-REGISTERED = 'Usted a sido registrado como votante. Escriba /vote por privado para emitir su voto.'
-START_SELECTION = 'Por favor escoja en que discusión desea participar:'
-VOTING_IN = 'Usted está votando en la discusión del grupo "%s". Marque en las opciones para agregar al final o eliminar la opción seleccionada. Marque cancelar para finalizar su voto. Una vez seleccionadas todas las opciones marque finalizar para emitir su voto.'
-VOTING_IN_WHIT_STATE = VOTING_IN + '\n\nSu voto actual es:\n%s'
+NO_ACTIVE = 'No hay un Quiz activo en este grupo.'
+NO_REGISTER = 'No encontramos ningún Quiz al que se haya registrado. Escriba /register en el grupo donde el Quiz haya sido creado para registrarse.'
+NO_CONFIG = 'No se ha configurado completamente aún el Quiz actual.'
+REGISTERED = 'Usted a sido registrado como participante. Escriba /vote por privado para responder al Quiz.'
+START_SELECTION = 'Por favor escoja en que Quiz desea participar:'
+VOTING_IN = 'Usted está participando en el Quiz del grupo "%s". Marque en las opciones para agregar o eliminar la opción seleccionada de su respuesta. Marque cancelar para finalizar sin responder. Marque finalizar para emitir confirmar su respuesta seleccionada.\n\nPregunta %s\n\n%s'
+VOTING_IN_WHIT_STATE = VOTING_IN + '\n\nSu respuesta actual es:\n%s'
 CANCEL = 'Se ha cancelado su voto en la discusión de "%s". Escribe /vote de nuevo para iniciar otra votación.'
 CONFIRM = 'Su voto en la discusión de "%s" a sido guardado satisfactoriamente. Recuerde que puede volver a ejercer su voto escribiendo /vote aquí nuevamente. Su último voto válido será el considerado al finalizar la discusión.\n\nSu voto actual es:\n%s'
 INVALID = 'Su voto en "%s" no se a podido emitir correctamente. Esto puede ocurrir por varias razones entre ellas que la votación a la cual hace referencia ya haya finalizado. Escriba /vote para emitir su voto de nuevo en la votación correcta o regístrese nuevamente en su chat usando /register en el grupo origen de la discusión.'
@@ -30,16 +30,16 @@ VOTE_REGEX = r'VOTE\*(.+)\*$'
 VOTE_PATTERN = 'VOTE*%s*'
 
 def vote_parse_cdata(cdata):
-    idx, typex, option = re.findall('^(.+):([1|2|3|4]):(.*)$', cdata)[0]
-    return int(idx), int(typex), option
+    idx, question, typex, option = re.findall('^(.+):([0-9]+):([1|2|3|4]):(.*)$', cdata)[0]
+    return int(idx), question, int(typex), option
 
-def vote_build_cdata(chat_id, option, typex):
-    return VOTE_PATTERN%(f'{chat_id}:{typex}:{option}')
+def vote_build_cdata(chat_id, question, option, typex):
+    return VOTE_PATTERN%(f'{chat_id}:{question}:{typex}:{option}')
 
 def vote_parse_selected(data: str):
     parts = data.split(':')
     if len(parts) > 1:
-        result = re.findall('([0-9]+)-\) (.*)', parts[-1])
+        result = re.findall(r'([0-9]+)-\) (.*)', parts[-1])
         return [ op for _, op in result ]
     return []
 
@@ -57,7 +57,7 @@ def vote_register(update, context):
         voters = get_or_init(context.chat_data, 'voters', dict())
         user_id = update.effective_user.id
         if not user_id in voters:
-            voters[user_id] = None
+            voters[user_id] = [None] * len(context.chat_data['quiz'])
         assert False, REGISTERED
     except AssertionError as e:
         update.effective_message.reply_text(str(e))
@@ -81,21 +81,23 @@ def vote_selection_callback(update, context):
     query.answer()
     chat_id = int(re.findall(VOTE_SEL_REGEX, query.data)[0])
     chat_title = context.bot.get_chat(chat_id).title
-    options = context.dispatcher.chat_data[chat_id]['options']
+    question = 0
+    desc, options, _ = context.dispatcher.chat_data[chat_id]['quiz'][question]
     keyboard = []
     for option in options:
-        cdata = vote_build_cdata(chat_id, option, AADD)
+        cdata = vote_build_cdata(chat_id, question, option, AADD)
         keyboard.append([InlineKeyboardButton(f'Agregar "{option}"', 
                 callback_data=cdata)])
-    keyboard.append([InlineKeyboardButton('Cancelar', callback_data=vote_build_cdata(chat_id, '', ACAN))])
+    keyboard.append([InlineKeyboardButton('Cancelar', callback_data=vote_build_cdata(chat_id, question, '', ACAN)),
+     InlineKeyboardButton('Confirmar', callback_data=vote_build_cdata(chat_id, question, '', ACOM))])
 
-    query.edit_message_text(text=VOTING_IN%chat_title)
+    query.edit_message_text(text=VOTING_IN%(chat_title, question, desc))
     query.edit_message_reply_markup(reply_markup=InlineKeyboardMarkup(keyboard))
 
 def voting_callback(update, context):
     query: CallbackQuery = update.callback_query
     query.answer()
-    chat_id, operation, option =  vote_parse_cdata(re.findall(VOTE_REGEX, query.data)[0])
+    chat_id, question, operation, option =  vote_parse_cdata(re.findall(VOTE_REGEX, query.data)[0])
     selected = vote_parse_selected(query.message.text)
     chat_title = context.bot.get_chat(chat_id).title
     
@@ -113,7 +115,8 @@ def voting_callback(update, context):
             query.edit_message_text(text=INVALID%chat_title)
             return
 
-    options = context.dispatcher.chat_data[chat_id].get('options', [])
+    questions = context.dispatcher.chat_data[chat_id].get('quiz', [])
+    desc, options, _ = questions[question] if len(questions) > question else ('', [], [])
     if any([not op in options for op in selected ]):
         try:
             context.user_data['voting_in'].remove(chat_id)
@@ -130,31 +133,38 @@ def voting_callback(update, context):
     if operation == ACOM:
         voters = get_or_init(context.dispatcher.chat_data[chat_id], 'voters', dict())
         user_id = update.effective_user.id
-        voters[user_id] = selected
-        query.edit_message_text(text=CONFIRM%(chat_title, enumerate_options(selected)))
-        return
+        voters[user_id][question] = selected
+        if len(questions) > question:
+            question += 1
+            desc, options, _ = questions[question]
+            selected = []
+            left = [op for op in options if not op in selected]
+        else:
+            query.edit_message_text(text=CONFIRM%(chat_title, enumerate_options(selected)))
+            return
 
     keyboard = []
     
     for to_add in left:
         keyboard.append([InlineKeyboardButton(f'Agregar "{to_add}"', 
-                callback_data=vote_build_cdata(chat_id, to_add, AADD))])
+                callback_data=vote_build_cdata(chat_id, question, to_add, AADD))])
     
     for to_quit in selected:
         keyboard.append([InlineKeyboardButton(f'Remover "{to_quit}"', 
-                callback_data=vote_build_cdata(chat_id, to_quit, AREM))])
+                callback_data=vote_build_cdata(chat_id, question, to_quit, AREM))])
     
-    keyboard.append([InlineKeyboardButton('Cancelar', callback_data=vote_build_cdata(chat_id, '', ACAN))] + ([] if left else [InlineKeyboardButton('Confirmar', callback_data=vote_build_cdata(chat_id, '', ACOM))]))
+    keyboard.append([InlineKeyboardButton('Cancelar', callback_data=vote_build_cdata(chat_id, question, '', ACAN)),
+     InlineKeyboardButton('Confirmar', callback_data=vote_build_cdata(chat_id, question, '', ACOM))])
 
     state = enumerate_options(selected)
-    msg = VOTING_IN_WHIT_STATE%(chat_title, state) if selected else VOTING_IN%chat_title
+    msg = VOTING_IN_WHIT_STATE%(chat_title, question, desc, state) if selected else VOTING_IN%(chat_title, question, desc)
 
     query.edit_message_text(text=msg)
     query.edit_message_reply_markup(reply_markup=InlineKeyboardMarkup(keyboard))
 
 
 
-vote_register_handler = CommandHandler(['register', 'vote'], vote_register, Filters.group)
+vote_register_handler = CommandHandler(['register', 'join'], vote_register, Filters.group)
 vote_select_callback = CallbackQueryHandler(vote_selection_callback, pattern=VOTE_SEL_REGEX)
-vote_select_handler = CommandHandler('vote', vote_selection_handler, Filters.text & Filters.private)
+vote_select_handler = CommandHandler('play', vote_selection_handler, Filters.text & Filters.private)
 vote_callback = CallbackQueryHandler(voting_callback, pattern=VOTE_REGEX)
