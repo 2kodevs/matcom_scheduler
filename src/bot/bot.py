@@ -10,8 +10,8 @@ def set_commands(bot):
     bot.set_my_commands([
         ('create'   , 'Crea una nueva discusión del calendario.'),
         ('config'   , 'Configura las opciones de la discución.'),
-        ('vote'     , 'Toma parte en la discusión actual.'),
-        ('register' , 'Registrarse para votar en la discusión actual.'),
+        ('play'     , 'Responde a las preguntas de un quiz.'),
+        ('register' , 'Registrarse para participar en el quiz actual.'),
         ('close'    , 'Cierra la discusión actual.'),
         ('cancel'   , 'Cancela una acción en la configuración o la votación actual si se usa en el grupo.'),
         ('start'    , 'Inicia el bot.'),
