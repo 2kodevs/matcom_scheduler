@@ -13,9 +13,9 @@ REGISTERED = 'Usted a sido registrado como participante. Escriba /vote por priva
 START_SELECTION = 'Por favor escoja en que Quiz desea participar:'
 VOTING_IN = 'Usted está participando en el Quiz del grupo "%s". Marque en las opciones para agregar o eliminar la opción seleccionada de su respuesta. Marque cancelar para finalizar sin responder. Marque finalizar para emitir confirmar su respuesta seleccionada.\n\nPregunta %s\n\n%s'
 VOTING_IN_WHIT_STATE = VOTING_IN + '\n\nSu respuesta actual es:\n%s'
-CANCEL = 'Se ha cancelado su voto en la discusión de "%s". Escribe /vote de nuevo para iniciar otra votación.'
-CONFIRM = 'Su voto en la discusión de "%s" a sido guardado satisfactoriamente. Recuerde que puede volver a ejercer su voto escribiendo /vote aquí nuevamente. Su último voto válido será el considerado al finalizar la discusión.\n\nSu voto actual es:\n%s'
-INVALID = 'Su voto en "%s" no se a podido emitir correctamente. Esto puede ocurrir por varias razones entre ellas que la votación a la cual hace referencia ya haya finalizado. Escriba /vote para emitir su voto de nuevo en la votación correcta o regístrese nuevamente en su chat usando /register en el grupo origen de la discusión.'
+CANCEL = 'Se ha cancelado su respuesta en el Quiz de "%s". Escriba /play de nuevo para iniciar otra vez.'
+CONFIRM = 'Su respuesta en el Quiz de "%s" a sido guardada satisfactoriamente. Recuerde que puede volver a responder escribiendo /play aquí nuevamente. Su último respuesta válida será la considerada al finalizar el Quiz.\n\nSu respuesta actual es:\n%s'
+INVALID = 'Su respuesta en "%s" no se a podido emitir correctamente. Esto puede ocurrir por varias razones entre ellas que el Quiz a la cual hace referencia ya haya finalizado. Escriba /play para responder de nuevo en el Quiz correcto o regístrese nuevamente en su chat usando /register en el grupo origen del Quiz.'
 
 
 #Vote Callback helpers
@@ -134,7 +134,7 @@ def voting_callback(update, context):
         voters = get_or_init(context.dispatcher.chat_data[chat_id], 'voters', dict())
         user_id = update.effective_user.id
         voters[user_id][question] = selected
-        if len(questions) > question:
+        if len(questions) > question + 1:
             question += 1
             desc, options, _ = questions[question]
             selected = []
