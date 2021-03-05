@@ -1,5 +1,6 @@
 import re
 
+emoji = ['❌', '✅']
 
 def is_chat_admin(bot, chat_id, user_id):
     '''
@@ -22,7 +23,9 @@ def get_or_init(d: dict, key, default):
 def clean_config_data(data):
     try:
         del data['chat_id']
-        del data['options']
+        del data['quiz']
+        del data['cur']
+        del data['option']
     except KeyError:
         pass
 
@@ -43,3 +46,12 @@ def clear_chat(chat, context):
 
 def enumerate_options(options):
     return '\n'.join(f'{i + 1}-) {op}' for i, op in enumerate(options))
+
+def question_to_str(question, options):
+    return "%s:\n%s\n" % (question, '\n'.join(f'{emoji[v]} {op}' for v, op in options))
+
+def quiz_to_str(quiz):
+    txt = ["Preguntas del Quiz\n"]
+    for q in range(len(quiz)):
+        text.append(question_to_str(q))
+    return 'n'.join(text)
