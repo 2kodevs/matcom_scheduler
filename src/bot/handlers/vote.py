@@ -9,7 +9,7 @@ from telegram.ext import CommandHandler, CallbackQueryHandler, Filters, MessageH
 NO_ACTIVE = 'No hay un Quiz activo en este grupo.'
 NO_REGISTER = 'No encontramos ningún Quiz al que se haya registrado. Escriba /register en el grupo donde el Quiz haya sido creado para registrarse.'
 NO_CONFIG = 'No se ha configurado completamente aún el Quiz actual.'
-REGISTERED = 'Usted a sido registrado como participante. Escriba /vote por privado para responder al Quiz.'
+REGISTERED = 'Usted a sido registrado como participante. Escriba /play por privado para responder al Quiz.'
 START_SELECTION = 'Por favor escoja en que Quiz desea participar:'
 VOTING_IN = 'Usted está participando en el Quiz del grupo "%s". Marque en las opciones para agregar o eliminar la opción seleccionada de su respuesta. Marque cancelar para finalizar sin responder. Marque finalizar para emitir confirmar su respuesta seleccionada.\n\nPregunta %s\n\n%s'
 VOTING_IN_WHIT_STATE = VOTING_IN + '\n\nSu respuesta actual es:\n%s'
@@ -51,7 +51,7 @@ def vote_register(update, context):
     user_data = context.user_data
     try:
         assert context.chat_data.get('active'), NO_ACTIVE
-        assert context.chat_data.get('options'), NO_CONFIG
+        assert context.chat_data.get('quiz'), NO_CONFIG
         voting = get_or_init(user_data, 'voting_in', set())
         voting.add(chat)
         voters = get_or_init(context.chat_data, 'voters', dict())
