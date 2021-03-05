@@ -52,7 +52,6 @@ def question_to_str(question, options):
 
 def quiz_to_str(quiz):
     text = ["Preguntas del Quiz\n"]
-    for q in range(len(quiz)):
-        print(quiz[q])
-        text.append(question_to_str(**quiz[q]))
+    for query in quiz:
+        text.append(question_to_str(**query))
     return '\n'.join(text)
