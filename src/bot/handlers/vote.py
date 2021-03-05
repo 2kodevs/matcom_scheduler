@@ -119,7 +119,7 @@ def voting_callback(update, context):
             return
 
     questions = context.dispatcher.chat_data[chat_id].get('quiz', [])
-    desc, options, _ = get_question_data(questions[question]) if len(questions.keys()) > question else ('', [], [])
+    desc, options, _ = get_question_data(questions[question]) if len(questions) > question else ('', [], [])
     if any([not op in options for op in selected ]):
         try:
             context.user_data['voting_in'].remove(chat_id)
