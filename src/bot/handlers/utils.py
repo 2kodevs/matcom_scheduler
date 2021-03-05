@@ -50,8 +50,8 @@ def enumerate_options(options):
 def question_to_str(question, options):
     return "%s:\n%s\n" % (question, '\n'.join(f'{emoji[v]} {op}' for v, op in options))
 
-def quiz_to_str(quiz):
-    text = ["Preguntas del Quiz\n"]
+def quiz_to_str(quiz, header):
+    text = [f"{header}\n"]
     for query in quiz:
         text.append(question_to_str(**query))
     return '\n'.join(text)

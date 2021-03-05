@@ -155,7 +155,7 @@ def end_quiz_callback(update, context):
     query = update.callback_query
     query.answer()
     
-    update.effective_user.send_message(quiz_to_str(context.user_data['quiz']))
+    update.effective_user.send_message(quiz_to_str(context.user_data['quiz'], "Preguntas del Quiz"))
     update.effective_user.send_message(DONE_CONFIG)
     chat_id = context.user_data['chat_id']
     quiz = context.user_data['quiz']
