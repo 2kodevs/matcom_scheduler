@@ -19,10 +19,10 @@ DONE_CONFIG     = 'Perfecto! Ha terminado la configuración.\nUtilice /close en 
 INIT_DISCUSS    = 'Comienza la votación!!!\nUtiliza /vote para participar.\n\nLas opciones a organizar son:\n%s'
 BYE             = 'Se ha cancelado la configuración'
 
-END_QUIZ_RE         = r'END$'
-END_QUIZ_PATTERN    =  'END$'
-ADD_QUERY_RE        = r'ADD$'
-ADD_QUERY_PATTERN   =  'ADD$'
+END_QUIZ_RE         = r'END\*\*$'
+END_QUIZ_PATTERN    =  'END**'
+ADD_QUERY_RE        = r'ADD\*\*$'
+ADD_QUERY_PATTERN   =  'ADD**'
 OPT_TYPE_RE         = r'TYPE\*(.+)\*$'
 OPT_TYPE_PATTERN    =  'TYPE*%d*'
 
@@ -159,7 +159,7 @@ def end_quiz_callback(update, context):
     update.effective_user.send_message(DONE_CONFIG)
     chat_id = context.user_data['chat_id']
     quiz = context.user_data['quiz']
-    context.dispatcher.chat_data[chat_id]['quiz'] = list(options)
+    context.dispatcher.chat_data[chat_id]['quiz'] = quiz
     context.user_data['owner'].remove(chat_id)
     text = 'AQUI HAY Q HACERLE DISPLAY AL QUIZ OR SOMETHING'
     context.bot.send_message(chat_id, INIT_DISCUSS % (text))
@@ -189,7 +189,7 @@ config_handler = ConversationHandler(
         TYPE_STATE:     [CallbackQueryHandler(type_callback, pattern=OPT_TYPE_RE)],
         FINAL_STATE:    [
             CallbackQueryHandler(end_quiz_callback, pattern=END_QUIZ_RE),
-            #CallbackQueryHandler(add_query_callback, pattern=ADD_QUERY_RE),
+            CallbackQueryHandler(add_query_callback, pattern=ADD_QUERY_RE),
         ],
     },
     fallbacks=[

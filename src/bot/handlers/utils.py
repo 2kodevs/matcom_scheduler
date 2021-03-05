@@ -51,7 +51,8 @@ def question_to_str(question, options):
     return "%s:\n%s\n" % (question, '\n'.join(f'{emoji[v]} {op}' for v, op in options))
 
 def quiz_to_str(quiz):
-    txt = ["Preguntas del Quiz\n"]
+    text = ["Preguntas del Quiz\n"]
     for q in range(len(quiz)):
-        text.append(question_to_str(q))
-    return 'n'.join(text)
+        print(quiz[q])
+        text.append(question_to_str(**quiz[q]))
+    return '\n'.join(text)
