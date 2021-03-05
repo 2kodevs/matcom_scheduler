@@ -1,9 +1,8 @@
 import re
 
-from .filters import private_text_filter
-from .utils import get_or_init, enumerate_options
+from .utils import get_or_init, enumerate_options, quiz_to_str, custom_quiz_to_str
 from telegram import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
-from telegram.ext import CommandHandler, CallbackQueryHandler, Filters, MessageHandler
+from telegram.ext import CommandHandler, CallbackQueryHandler, Filters
 
 
 NO_ACTIVE = 'No hay un Quiz activo en este grupo.'
@@ -14,7 +13,7 @@ START_SELECTION = 'Por favor escoja en que Quiz desea participar:'
 VOTING_IN = 'Usted está participando en el Quiz del grupo "%s". Marque en las opciones para agregar o eliminar la opción seleccionada de su respuesta. Marque cancelar para finalizar sin responder. Marque finalizar para emitir confirmar su respuesta seleccionada.\n\nPregunta %s\n\n%s'
 VOTING_IN_WHIT_STATE = VOTING_IN + '\n\nSu respuesta actual es:\n%s'
 CANCEL = 'Se ha cancelado su respuesta en el Quiz de "%s". Escriba /play de nuevo para iniciar otra vez.'
-CONFIRM = 'Su respuesta en el Quiz de "%s" a sido guardada satisfactoriamente. Recuerde que puede volver a responder escribiendo /play aquí nuevamente. Su último respuesta válida será la considerada al finalizar el Quiz.\n\nSu respuesta actual es:\n%s'
+CONFIRM = 'Su respuesta en el Quiz de "%s" a sido guardada satisfactoriamente. Recuerde que puede volver a responder escribiendo /play aquí nuevamente. Su último respuesta válida será la considerada al finalizar el Quiz.\n\n%s'
 INVALID = 'Su respuesta en "%s" no se a podido emitir correctamente. Esto puede ocurrir por varias razones entre ellas que el Quiz a la cual hace referencia ya haya finalizado. Escriba /play para responder de nuevo en el Quiz correcto o regístrese nuevamente en su chat usando /register en el grupo origen del Quiz.'
 
 
@@ -143,7 +142,8 @@ def voting_callback(update, context):
             selected = []
             left = [op for op in options if not op in selected]
         else:
-            query.edit_message_text(text=CONFIRM%(chat_title, enumerate_options(selected)))
+            quiz = custom_quiz_to_str(questions, voters[user_id])
+            query.edit_message_text(text=CONFIRM%(chat_title, quiz_to_str(quiz, "Su respuesta actual es:")))
             return
 
     keyboard = []

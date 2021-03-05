@@ -55,3 +55,10 @@ def quiz_to_str(quiz, header):
     for query in quiz:
         text.append(question_to_str(**query))
     return '\n'.join(text)
+
+def custom_quiz_to_str(quiz, answers):
+    new_quiz = quiz.copy()
+    for id, (_, options) in enumerate(quiz):
+        ans = answers[id]
+        new_quiz[id]['options'] = list(map(lambda t: (1, t[1]) if t[1] in ans else (0, t[1]), new_quiz[id]['options']))
+    return new_quiz()
