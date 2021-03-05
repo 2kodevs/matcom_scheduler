@@ -31,7 +31,7 @@ VOTE_PATTERN = 'VOTE*%s*'
 
 def vote_parse_cdata(cdata):
     idx, question, typex, option = re.findall('^(.+):([0-9]+):([1|2|3|4]):(.*)$', cdata)[0]
-    return int(idx), question, int(typex), option
+    return int(idx), int(question), int(typex), option
 
 def vote_build_cdata(chat_id, question, option, typex):
     return VOTE_PATTERN%(f'{chat_id}:{question}:{typex}:{option}')
@@ -42,6 +42,9 @@ def vote_parse_selected(data: str):
         result = re.findall(r'([0-9]+)-\) (.*)', parts[-1])
         return [ op for _, op in result ]
     return []
+
+def get_question_data(question):
+    return question['question'], [ option for _, option in question['options']], [ correct for correct, _ in question['options']]
 
 def vote_register(update, context):
     '''
@@ -82,7 +85,7 @@ def vote_selection_callback(update, context):
     chat_id = int(re.findall(VOTE_SEL_REGEX, query.data)[0])
     chat_title = context.bot.get_chat(chat_id).title
     question = 0
-    desc, options, _ = context.dispatcher.chat_data[chat_id]['quiz'][question]
+    desc, options, _ = get_question_data(context.dispatcher.chat_data[chat_id]['quiz'][question])
     keyboard = []
     for option in options:
         cdata = vote_build_cdata(chat_id, question, option, AADD)
@@ -116,7 +119,7 @@ def voting_callback(update, context):
             return
 
     questions = context.dispatcher.chat_data[chat_id].get('quiz', [])
-    desc, options, _ = questions[question] if len(questions) > question else ('', [], [])
+    desc, options, _ = get_question_data(questions[question]) if len(questions.keys()) > question else ('', [], [])
     if any([not op in options for op in selected ]):
         try:
             context.user_data['voting_in'].remove(chat_id)
@@ -136,7 +139,7 @@ def voting_callback(update, context):
         voters[user_id][question] = selected
         if len(questions) > question + 1:
             question += 1
-            desc, options, _ = questions[question]
+            desc, options, _ = get_question_data(questions[question])
             selected = []
             left = [op for op in options if not op in selected]
         else:
