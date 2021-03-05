@@ -18,10 +18,10 @@ def close(update, context):
 
         get_user_name = lambda idx: update.effective_chat.get_member(idx).user.full_name
         
-        quiz : dict                   = context.chat_data['quiz']
+        quiz : list                   = context.chat_data['quiz']
         participants : list           = [(k, get_user_name(k), v) for k, v in context.chat_data['voters'].items() if not any(votes, lambda e: e == None)]
         participants_scores           = {}
-        quiz_count                    = len(quiz.values())
+        quiz_count                    = len(quiz)
         correct_responses_by_question = [[opt[1] for opt in quiz[qi]['options'] if opt[0]] for qi in range(quiz_count)]
         for idx, uname, responses in participants:
             correct = 0
