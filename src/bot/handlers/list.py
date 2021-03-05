@@ -14,7 +14,7 @@ LIST      = 'Los siguientes usuarios han emitido sus votos:\n%s'
 def list_group_voters(update, context):
     try:
         assert context.chat_data.get('active'), NO_ACTIVE
-        assert context.chat_data.get('options'), NO_CONFIG
+        assert context.chat_data.get('quiz'), NO_CONFIG
         assert any(context.chat_data.get('voters', dict()).values()), NO_VOTERS
         voters:dict = context.chat_data['voters']
         get_user_name = lambda idx: update.effective_chat.get_member(idx).user.full_name
