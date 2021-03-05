@@ -65,12 +65,12 @@ def select(update, context):
     
 def question(update, context):
     q = update.effective_message.text
-    quiz = get_or_init(context.user_data, 'quiz', {})
-    cur = quiz[len(quiz)] = {
+    quiz = get_or_init(context.user_data, 'quiz', [])
+    quiz.append({
         'question': q,
         'options': [],
-    } 
-    context.user_data['cur'] = cur
+    })
+    context.user_data['cur'] = quiz[-1]
     return new_option(update.effective_user, OPTIONS)
 
 def new_option(user, msg):
@@ -132,7 +132,7 @@ def del_command(update, context):
     
 def done_command(update, context):
     try:
-        assert context.user_data.get('quiz', {})
+        assert context.user_data.get('quiz', [])
     except AssertionError:
         update.effective_user.send_message('Su quiz esta vacio aún.')
         update.effective_user.send_message(QUESTION)
