@@ -1,6 +1,6 @@
 import re
 
-emoji = ['❌', '✅']
+emoji = ['❌', '✅', '❓']
 
 def is_chat_admin(bot, chat_id, user_id):
     '''
@@ -47,18 +47,27 @@ def clear_chat(chat, context):
 def enumerate_options(options):
     return '\n'.join(f'{i + 1}-) {op}' for i, op in enumerate(options))
 
-def question_to_str(question, options):
-    return "%s:\n%s\n" % (question, '\n'.join(f'{emoji[v]} {op}' for v, op in options))
+def question_to_str(fvalue, question, options):
+    return "%s:\n%s\n" % (question, '\n'.join(f'{emoji[v if fvalue(v) is None else fvalue(v)]} {op}' for v, op in options))
 
-def quiz_to_str(quiz, header):
+def quiz_to_str(quiz, header, fvalue=lambda x : None):
     text = [f"{header}\n"]
     for query in quiz:
-        text.append(question_to_str(**query))
+        text.append(question_to_str(fvalue, **query))
     return '\n'.join(text)
 
-def custom_quiz_to_str(quiz, answers):
+def custom_quiz_to_str(quiz, answers, validate=False):
     new_quiz = quiz.copy()
-    for id, (_, options) in enumerate(quiz):
+    alternate = lambda x, r : 1 if x == r else 0
+    for id, (_, _) in enumerate(quiz):
         ans = answers[id]
-        new_quiz[id]['options'] = list(map(lambda t: (1, t[1]) if t[1] in ans else (0, t[1]), new_quiz[id]['options']))
-    return new_quiz()
+        if validate:
+            temp = []
+            for t1, t2 in zip(quiz[id]['options'], new_quiz[id]['options']):
+                v1, ans1 = t1
+                v2, _ = t2
+                temp.append((alternate(v2, v1), ans1))
+            new_quiz[id]['options'] = temp
+        else:
+            new_quiz[id]['options'] = list(map(lambda t: (1, t[1]) if t[1] in ans else (0, t[1]), new_quiz[id]['options']))
+    return new_quiz

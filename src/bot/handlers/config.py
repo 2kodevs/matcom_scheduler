@@ -16,7 +16,7 @@ CHOOSE_DEL      = 'Selecione las opciones a eliminar una por una'
 CHOOSE_ADD      = 'Añada una nueva opción'
 USELESS         = "Su configuración ha fallado, utilice /config nuevamente y añada algunas opciones cuando esté listo."
 DONE_CONFIG     = 'Perfecto! Ha terminado la configuración.\nUtilice /close en el chat relacionado para cerrar la discusión. Si necesita hacer algún cambio debe utilizar /cancel en el chat para cancelar la discusión y repetir el procedimiento para la nueva configuración.'
-INIT_DISCUSS    = 'Comienza la votación!!!\nUtiliza /vote para participar.\n\nLas opciones a organizar son:\n%s'
+INIT_DISCUSS    = 'Comienza la votación!!!\nUtiliza /register para participar.\n\n%s'
 BYE             = 'Se ha cancelado la configuración'
 
 END_QUIZ_RE         = r'END\*\*$'
@@ -161,7 +161,7 @@ def end_quiz_callback(update, context):
     quiz = context.user_data['quiz']
     context.dispatcher.chat_data[chat_id]['quiz'] = quiz
     context.user_data['owner'].remove(chat_id)
-    text = 'AQUI HAY Q HACERLE DISPLAY AL QUIZ OR SOMETHING'
+    text = quiz_to_str(quiz, "El quiz es:", lambda x : 2)
     context.bot.send_message(chat_id, INIT_DISCUSS % (text))
     clean_config_data(context.user_data)
     return ConversationHandler.END    

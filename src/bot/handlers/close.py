@@ -1,6 +1,6 @@
 from ...model import use_model
 from telegram.ext import CommandHandler, Filters
-from .utils import is_chat_admin, clear_chat, enumerate_options
+from .utils import is_chat_admin, clear_chat, enumerate_options, quiz_to_str, custom_quiz_to_str
 
 # Messages
 ADMINS_ONLY = 'Ups!!!, solo los administradores pueden usar este comando :('
@@ -19,7 +19,7 @@ def close(update, context):
         get_user_name = lambda idx: update.effective_chat.get_member(idx).user.full_name
         
         quiz : list                   = context.chat_data['quiz']
-        participants : list           = [(k, get_user_name(k), v) for k, v in context.chat_data['voters'].items() if not any(votes, lambda e: e == None)]
+        participants : list           = [(k, get_user_name(k), v) for k, v in context.chat_data['voters'].items()] #if not any(votes, lambda e: e == None)]
         participants_scores           = {}
         quiz_count                    = len(quiz)
         correct_responses_by_question = [[opt[1] for opt in quiz[qi]['options'] if opt[0]] for qi in range(quiz_count)]
@@ -36,6 +36,12 @@ def close(update, context):
         sol_msg = 'Los resultados de la ronda es: \n'
         sol_msg += enumerate_options(solution)
         context.bot.send_message(chat_id=chat, text=sol_msg)
+        context.bot.send_message(chat_id=chat, text=quiz_to_str(quiz, 'Quiz resuelto:'))
+
+        voters = context.dispatcher.chat_data[chat]['voters']
+        for user_id, ans in voters.items():
+            new_quiz = custom_quiz_to_str(quiz, ans, validate=True)
+            context.bot.send_message(chat_id=user_id, text=quiz_to_str(new_quiz, 'Sus respuestas revisadas:'))
 
         clear_chat(chat, context)
         assert False, CLOSED
