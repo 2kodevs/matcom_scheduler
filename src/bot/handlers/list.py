@@ -6,9 +6,9 @@ from telegram import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
 from telegram.ext import CommandHandler, CallbackQueryHandler, Filters, MessageHandler
 
 
-NO_ACTIVE = 'No hay una discusión activa en este grupo.'
-NO_CONFIG = 'No se ha configurado completamente aún la discusión actual.'
-NO_VOTERS = 'La discusión activa en este grupo no tiene votantes aún.'
+NO_ACTIVE = 'No hay un quiz activo en este grupo.'
+NO_CONFIG = 'No se ha configurado completamente aún el quiz actual.'
+NO_VOTERS = 'El quiz activo en este grupo no tiene votantes aún.'
 LIST      = 'Los siguientes usuarios han emitido sus votos:\n%s'
 
 def list_group_voters(update, context):

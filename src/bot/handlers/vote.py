@@ -160,7 +160,7 @@ def voting_callback(update, context):
      InlineKeyboardButton('Confirmar', callback_data=vote_build_cdata(chat_id, question, '', ACOM))])
 
     state = enumerate_options(selected)
-    msg = VOTING_IN_WHIT_STATE%(chat_title, question, desc, state) if selected else VOTING_IN%(chat_title, question + 1, desc)
+    msg = VOTING_IN_WHIT_STATE%(chat_title, question + 1, desc, state) if selected else VOTING_IN%(chat_title, question + 1, desc)
 
     query.edit_message_text(text=msg)
     query.edit_message_reply_markup(reply_markup=InlineKeyboardMarkup(keyboard))

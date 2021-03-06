@@ -4,9 +4,9 @@ from .utils import is_chat_admin, clear_chat, enumerate_options, quiz_to_str, cu
 
 # Messages
 ADMINS_ONLY = 'Ups!!!, solo los administradores pueden usar este comando :('
-ACTIVE      = 'Para cancelar una discusión, primero se debe crear una usando /create'
-CLOSED      = 'Discusión cerrada satisfactoriamente '
-NO_VOTES    = 'No hay votos, por tanto la discusión no puede ser cerrada. Si quiere cancelarla, use /cancel'
+ACTIVE      = 'Para cancelar un quiz, primero se debe crear uno usando /create'
+CLOSED      = 'Quiz cerrado satisfactoriamente '
+NO_VOTES    = 'No hay respuestas, por tanto el quiz no puede ser cerrado. Si quiere cancelarlo, use /cancel'
 
 def close(update, context):
     user = update.effective_user.id
@@ -19,7 +19,7 @@ def close(update, context):
         get_user_name = lambda idx: update.effective_chat.get_member(idx).user.full_name
         
         quiz : list                   = context.chat_data['quiz']
-        participants : list           = [(k, get_user_name(k), v) for k, v in context.chat_data['voters'].items()] #if not any(votes, lambda e: e == None)]
+        participants : list           = [(k, get_user_name(k), v) for k, v in context.chat_data['voters'].items()] #if not any(v)]
         participants_scores           = {}
         quiz_count                    = len(quiz)
         correct_responses_by_question = [[opt[1] for opt in quiz[qi]['options'] if opt[0]] for qi in range(quiz_count)]

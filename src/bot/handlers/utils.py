@@ -61,6 +61,7 @@ def custom_quiz_to_str(quiz, answers, validate=False):
     alternate = lambda x, r : 1 if x == r else 0
     for id, (_, _) in enumerate(quiz):
         ans = answers[id]
+        new_quiz[id]['options'] = list(map(lambda t: (1, t[1]) if t[1] in ans else (0, t[1]), new_quiz[id]['options']))
         if validate:
             temp = []
             for t1, t2 in zip(quiz[id]['options'], new_quiz[id]['options']):
@@ -68,6 +69,4 @@ def custom_quiz_to_str(quiz, answers, validate=False):
                 v2, _ = t2
                 temp.append((alternate(v2, v1), ans1))
             new_quiz[id]['options'] = temp
-        else:
-            new_quiz[id]['options'] = list(map(lambda t: (1, t[1]) if t[1] in ans else (0, t[1]), new_quiz[id]['options']))
     return new_quiz
