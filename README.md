@@ -27,6 +27,6 @@ Also you can personalize your bot, and again to know how to do that we recommend
 
 ## Authors ✒️
 
-- **Miguel Tenorio Potrony** ------> [stdevAntiD2ta](https://github.com/stdevAntiD2ta)
-- **Lázaro Raúl Iglesias Vera** ----> [stdevRulo](https://github.com/stdevRulo)
+- **Miguel Tenorio Potrony** ------> [AntiD2ta](https://github.com/AntiD2ta)
+- **Lázaro Raúl Iglesias Vera** ----> [e1Ru1o](https://github.com/e1Ru1o)
 - **Carlos Bermudez Porto** -------> [cbermudez97](https://github.com/cbermudez97)
