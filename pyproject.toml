@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "matcom_scheduler"
+version = "0.1.0"
+description = "Bot para Polls de Matcom :)"
+authors = ["cbermudez97", "AntiD2ta", "E1Ru1o"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+python-telegram-bot = "13.0"
+numpy = "1.18.1"
+scipy = "1.4.1"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
