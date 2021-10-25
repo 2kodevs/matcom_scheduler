@@ -35,7 +35,7 @@ INVALID = '⚠️ Su voto en "%s" no se ha emitido correctamente. Esto puede ocu
 NO_VALID    = '⚠️ El modelo que intentó activar no es válido. Escriba /models para consultar los modelos disponibles actualmente.'
 ACCEPT      = '✅ El modelo a utilizar ha sido cambiado satisfactoriamente. Escriba /models para saber más acerca de los modelos.'
 INTRO_G = '''
-🤖 ¡Hola! Soy eπ-2021, el nuevo asistente de MatCom, y a través de este bot gestiono las encuestas que tienen lugar en los grupos de la Facultad.
+🤖 ¡Hola! Soy eπ-2021, el asistente virtual de MatCom, y a través de este bot gestiono las encuestas que tienen lugar en los grupos de la Facultad.
 
 😊 Puedo ayudar a alcanzar el consenso de una brigada, un año o toda la Facultad sobre cualquier cuestión. Ya tengo experiencia en generar calendarios de pruebas, seleccionar una mascota, etc.
 
@@ -46,7 +46,7 @@ INTRO_G = '''
 '''
 
 INTRO_PV = '''
-🤖 ¡Hola! Soy eπ-2021, el nuevo asistente de MatCom, y a través de este bot gestiono las encuestas que tienen lugar en los grupos de la Facultad.
+🤖 ¡Hola! Soy eπ-2021, el asistente virtual de MatCom, y a través de este bot gestiono las encuestas que tienen lugar en los grupos de la Facultad.
 
 😊 Puedo ayudar a alcanzar el consenso de una brigada, un año o toda la Facultad sobre cualquier cuestión. Ya tengo experiencia en generar calendarios de pruebas, seleccionar una mascota, etc.
 
