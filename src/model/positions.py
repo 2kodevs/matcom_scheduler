@@ -1,7 +1,7 @@
 from .simple_model import SimpleModel
 
 class Positions(SimpleModel):
-    '''Busca la ordenación que minimice los cambios de orden entre las propuestas.'''
+    '''Selecciona la ordenación que minimice la suma de la cantidad de permutaciones requeridas por cada voto para alcanzar dicha ordenación.'''
 
     def distance(self, calendar1:list, calendar2:list):
         '''

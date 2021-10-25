@@ -2,7 +2,7 @@ from .base import BaseModel
 
 
 class Score(BaseModel):
-    '''Obtiene la ordenación según los puntos alcanzados por cada opción. Los puntos son de acuerdo al lugar que tuvo dicha opción en cada voto.'''
+    '''Ordena las opciones según la cantidad de puntos alcanzados por cada una. Cada votante asigna una determinada cantidad de puntos a cada opción, de acuerdo con la posición que le otorgó en la lista al votar.'''
     def solve(self, data: list):
         sample = data[0]
         N = len(sample)

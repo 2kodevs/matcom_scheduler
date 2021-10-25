@@ -4,7 +4,7 @@ import numpy as np
 from scipy.optimize import linprog
 
 class DEA_AR(BaseModel):
-    '''Busca el calendario más favorable según el modelo de exclusión DEA/AR(Data Envelopment Analysis/Assurance Region)'''
+    '''Busca la ordenación más favorable según el modelo de exclusión DEA/AR(Data Envelopment Analysis/Assurance Region).'''
     
     def solve(self, data:list):
         t = len(data[0])
