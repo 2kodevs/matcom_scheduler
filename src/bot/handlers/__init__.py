@@ -11,7 +11,7 @@ from .status import status_group_handler
 bot_handlers = [
     create_handler, 
     config_handler,
-    list_group_handler,
+    # list_group_handler,
     vote_register_handler,
     vote_select_handler,
     vote_select_callback,

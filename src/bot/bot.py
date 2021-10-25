@@ -16,7 +16,7 @@ def set_commands(bot):
         ('cancel'   , 'Cancela una acción en la configuración o la votación actual si se usa en el grupo.'),
         ('start'    , 'Inicia el bot.'),
         ('help'     , 'Muestra la ayuda.'),
-        ('list'     , 'Lista los usuarios que han votado.'),
+        # ('list'     , 'Lista los usuarios que han votado.'),
         ('status'   , 'Muestra la cantidad de votantes y resultados parciales'),
         ('models'      , 'Lista los modelos disponibles para usar.'),
         ('list_models'      , 'Lista los modelos disponibles para usar.'),
