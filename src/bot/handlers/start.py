@@ -3,7 +3,7 @@ from telegram.ext import CommandHandler, Filters
 INTRO_G = '''
 Hola soy el bot Matcom Scheduler!!!
 
-Puedo ayudar a alcanzar el concenso de un grupo sobre una votación. Especialmente sobre el calendario de pruebas( o mascotas :) ).
+Puedo ayudar a alcanzar el consenso de un grupo sobre una votación. Especialmente sobre el calendario de pruebas( o mascotas :) ).
 Para poder usar el bot, agréguelo a un grupo. Solo los administradores del grupo podrán manejar una votación.
 
 Siendo administrador, use /create para iniciar una votación y luego siga las instrucciones del bot por el chat privado. No olvide usar /close para obtener los resultados!
@@ -13,7 +13,7 @@ Siendo administrador, use /create para iniciar una votación y luego siga las in
 INTRO_PV = '''
 Hola soy el bot Matcom Scheduler!!!
 
-Puedo ayudar a alcanzar el concenso de un grupo sobre una votación. Especialmente sobre el calendario de pruebas( o mascotas :) ).
+Puedo ayudar a alcanzar el consenso de un grupo sobre una votación. Especialmente sobre el calendario de pruebas( o mascotas :) ).
 Para poder usar el bot, agréguelo a un grupo. Solo los administradores del grupo podrán manejar una votación.
 
 Siendo administrador, use /create en un grupo para iniciar una votación y luego /config para configurar sus opciones. Una vez configurada una votación, los miembros del grupo correspondiente podrán tomar parte. No olvide usar /close para obtener los resultados!
