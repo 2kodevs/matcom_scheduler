@@ -17,10 +17,10 @@ def close(update, context):
         solution = use_model(votes, model)
         sol_msg = 'Los resultados de la votación son: \n'
         sol_msg += list_options(solution)
-        context.bot.send_message(chat_id=chat, text=sol_msg)
+        # context.bot.send_message(chat_id=chat, text=sol_msg)
 
         clear_chat(chat, context)
-        assert False, CLOSED
+        assert False, CLOSED + '\n\n' + sol_msg
     except AssertionError as e:
         update.effective_message.reply_text(str(e))
 
