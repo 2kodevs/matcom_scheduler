@@ -8,11 +8,11 @@ logger = logging.getLogger(__name__)
 
 def set_commands(bot):
     bot.set_my_commands([
-        ('create'   , 'Crea una nueva discusión del calendario.'),
-        ('config'   , 'Configura las opciones de la discución.'),
-        ('vote'     , 'Toma parte en la discusión actual.'),
-        ('register' , 'Registrarse para votar en la discusión actual.'),
-        ('close'    , 'Cierra la discusión actual.'),
+        ('create'   , 'Crea una nueva votación del calendario.'),
+        ('config'   , 'Configura las opciones de la votación.'),
+        ('vote'     , 'Toma parte en la votación actual.'),
+        ('register' , 'Registrarse para votar en la votación actual.'),
+        ('close'    , 'Cierra la votación actual.'),
         ('cancel'   , 'Cancela una acción en la configuración o la votación actual si se usa en el grupo.'),
         ('start'    , 'Inicia el bot.'),
         ('help'     , 'Muestra la ayuda.'),
