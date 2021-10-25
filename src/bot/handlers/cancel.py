@@ -1,17 +1,14 @@
+from ..messages import ACTIVE_CANCEL, ADMINS_ONLY, CANCELED
 from .utils import is_chat_admin, clear_chat
 from telegram.ext import CommandHandler, Filters
 
-# Messages
-ADMINS_ONLY     = 'Ups!!!, solo los administradores pueden usar este comando :('
-ACTIVE          = 'Para cancelar una votación, primero se debe crear una usando /create'
-CANCELED        = 'Votación cancelada satisfactoriamente '
 
 def cancel(update, context):
     user = update.effective_user.id
     chat = update.effective_chat.id
     try:
         assert is_chat_admin(context.bot, chat, user), ADMINS_ONLY
-        assert context.chat_data.get('active'), ACTIVE
+        assert context.chat_data.get('active'), ACTIVE_CANCEL
         clear_chat(chat, context)
         assert False, CANCELED
     except AssertionError as e:

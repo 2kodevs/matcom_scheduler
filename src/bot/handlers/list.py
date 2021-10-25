@@ -1,15 +1,12 @@
 import re
 
+from ..messages import LIST, NO_ACTIVE, NO_CONFIG, NO_VOTERS
+
 from .filters import private_text_filter
 from .utils import get_or_init, enumerate_options
 from telegram import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
 from telegram.ext import CommandHandler, CallbackQueryHandler, Filters, MessageHandler
 
-
-NO_ACTIVE = 'No hay una votación activa en este grupo.'
-NO_CONFIG = 'No se ha configurado completamente aún la votación actual.'
-NO_VOTERS = 'La votación activa en este grupo no tiene votantes aún.'
-LIST      = 'Los siguientes usuarios han emitido sus votos:\n%s'
 
 def list_group_voters(update, context):
     try:

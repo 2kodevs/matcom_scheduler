@@ -1,17 +1,13 @@
 import re
 
+from ..messages import ADMINS_ONLY, NO_ACTIVE, NO_CONFIG, NO_VOTERS, STATUS
+
 from ...model import use_model
 from .filters import private_text_filter
 from .utils import enumerate_options, is_chat_admin, list_options
 from telegram import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
 from telegram.ext import CommandHandler, CallbackQueryHandler, Filters, MessageHandler
 
-
-ADMINS_ONLY     = 'Ups!!!, solo los administradores pueden usar este comando :('
-NO_ACTIVE = 'No hay una votación activa en este grupo.'
-NO_CONFIG = 'No se ha configurado completamente aún la votación actual.'
-NO_VOTERS = 'La votación activa en este grupo no tiene votantes aún.'
-LIST      = 'En estos momentos han votado: %s personas.\n\n'
 
 def status_group_voters(update, context):
     user = update.effective_user.id
@@ -28,7 +24,7 @@ def status_group_voters(update, context):
         solution = use_model(votes, model)
         sol_msg = 'Los resultados parciales de la votación son: \n'
         sol_msg += list_options(solution)
-        assert False, (LIST%cant) + sol_msg
+        assert False, (STATUS%cant) + sol_msg
     except AssertionError as e:
         update.effective_message.reply_text(str(e))
 

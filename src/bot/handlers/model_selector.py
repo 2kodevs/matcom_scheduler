@@ -1,12 +1,14 @@
 import re
 
+from ..messages import ACCEPT, ADMINS_ONLY, LIST_MESSAGE, NO_VALID
+
 from ...model import models, default_model, use_model, ModelError
 from .utils import is_chat_admin
 from telegram.ext import CommandHandler, MessageHandler, Filters
 
 
 SET_MODEL_REGEX = r'^/set(\w+)'
-LIST_MESSAGE = 'Los modelos son las diferentes formas que el bot usa para determinar cúal es el resultado de una votación.\n\nLa lista de modelos disponibles ahora mismo es:\n %s \n\n Actualmente se encuentra seleccionado el modelo: %s.'
+
 
 def build_option(model):
     name = model.__name__
@@ -26,9 +28,6 @@ def list_models(update, context):
     except AssertionError as e:
         update.effective_message.reply_text(str(e))
 
-ADMINS_ONLY = 'Ups!!!, solo los administradores pueden usar este comando :('
-NO_VALID    = 'El modelo que intentó activar no es uno válido. Use /models para verificar cuales son los modelos disponibles.'
-ACCEPT      = 'El modelo a utilizar ha sido cambiado satisfactoriamente. Use /models para saber más acerca de los modelos.'
 
 def set_model(update, context):
     """

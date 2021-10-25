@@ -1,21 +1,8 @@
+from ..messages import BYE, CHOOSE_ADD, CHOOSE_DEL, DONE_CONFIG, EMPTY, INIT_DISCUSS, INVALID_OPTION, NO_CONFIG_PV, OPTIONS, SELECT, USELESS, WRONG_CHAT
 from .filters import private_text_filter
 from .utils import clean_config_data, enumerate_options
 from telegram import ReplyKeyboardMarkup, ReplyKeyboardRemove
 from telegram.ext import CommandHandler, Filters, ConversationHandler, MessageHandler
-
-# Messages
-NO_CONFIG       = "Usted no tiene ningún chat para configurar.\nNecesita usar el comando /create en algún chat."
-SELECT          = 'Seleccione el chat que desea configurar'
-OPTIONS         = 'Comience a escribir las opciones en mensajes separados cada una. No repita opciones. Puede utilizar los siguientes 3 comandos auxiliares durante la configuración.\n- /del Para eliminar algunas opciones\n- /add Para continuar añadiendo opciones\n- /done Para guardar la configuración'
-WRONG_CHAT      = "Usted no tiene acceso a la configuración del chat que seleccionó :(, utilice /config nuevamente y seleccione algún chat válido."
-INVALID_OPTION  = "Ha seleccionado una opción desconocida"
-EMPTY           = "La lista de opciones está vacía"
-CHOOSE_DEL      = 'Selecione las opciones a eliminar una por una'
-CHOOSE_ADD      = 'Continue añadiendo opciones'
-USELESS         = "Su configuración ha fallado, utilice /config nuevamente y añada algunas opciones cuando esté listo."
-DONE_CONFIG     = 'Perfecto! Ha terminado la configuración.\nUtilice /close en el chat relacionado para cerrar la votación. Si necesita hacer algún cambio debe utilizar /cancel en el chat para cancelar la votación y repetir el procedimiento para la nueva configuración.'
-INIT_DISCUSS    = 'Comienza la votación!!!\nUtiliza /vote para participar.\n\nLas opciones a organizar son:\n%s'
-BYE             = 'Se ha cancelado la configuración'
 
 # States
 SELECT_STATE, ADD_STATE, DEL_STATE = range(3) 
@@ -23,7 +10,7 @@ SELECT_STATE, ADD_STATE, DEL_STATE = range(3)
 # Handler methods
 def config(update, context):
     if not context.user_data.get('owner'):
-        update.message.reply_text(NO_CONFIG)
+        update.message.reply_text(NO_CONFIG_PV)
         return ConversationHandler.END
     
     keyboard = []
