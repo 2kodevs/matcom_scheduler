@@ -4,9 +4,9 @@ from .utils import is_chat_admin, clear_chat, enumerate_options
 
 # Messages
 ADMINS_ONLY     = 'Ups!!!, solo los administradores pueden usar este comando :('
-ACTIVE          = 'Para cancelar una discusión, primero se debe crear una usando /create'
-CLOSED          = 'Discusión cerrada satisfactoriamente '
-NO_VOTES        = 'No hay votos, por tanto la discusión no puede ser cerrada. Si quiere cancelarla, use /cancel'
+ACTIVE          = 'Para cancelar una votación, primero se debe crear una usando /create'
+CLOSED          = 'votación cerrada satisfactoriamente '
+NO_VOTES        = 'No hay votos, por tanto la votación no puede ser cerrada. Si quiere cancelarla, use /cancel'
 
 def close(update, context):
     user = update.effective_user.id

@@ -8,9 +8,9 @@ from telegram.ext import CommandHandler, CallbackQueryHandler, Filters, MessageH
 
 
 ADMINS_ONLY     = 'Ups!!!, solo los administradores pueden usar este comando :('
-NO_ACTIVE = 'No hay una discusión activa en este grupo.'
-NO_CONFIG = 'No se ha configurado completamente aún la discusión actual.'
-NO_VOTERS = 'La discusión activa en este grupo no tiene votantes aún.'
+NO_ACTIVE = 'No hay una votación activa en este grupo.'
+NO_CONFIG = 'No se ha configurado completamente aún la votación actual.'
+NO_VOTERS = 'La votación activa en este grupo no tiene votantes aún.'
 LIST      = 'En estos momentos han votado: %s personas.\n\n'
 
 def status_group_voters(update, context):

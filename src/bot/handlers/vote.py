@@ -6,16 +6,16 @@ from telegram import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
 from telegram.ext import CommandHandler, CallbackQueryHandler, Filters, MessageHandler
 
 
-NO_ACTIVE = 'No hay una discusión activa en este grupo.'
-NO_REGISTER = 'No encontramos ninguna discusión a la que se haya registrado. Escriba /register en el grupo donde la discusión haya sido creada para registrarse.'
-NO_CONFIG = 'No se ha configurado completamente aún la discusión actual.'
+NO_ACTIVE = 'No hay una votación activa en este grupo.'
+NO_REGISTER = 'No encontramos ninguna votación a la que se haya registrado. Escriba /register en el grupo donde la votación haya sido creada para registrarse.'
+NO_CONFIG = 'No se ha configurado completamente aún la votación actual.'
 REGISTERED = 'Usted a sido registrado como votante. Escriba /vote por privado para emitir su voto.'
-START_SELECTION = 'Por favor escoja en que discusión desea participar:'
-VOTING_IN = 'Usted está votando en la discusión del grupo "%s". Marque en las opciones para agregar al final o eliminar la opción seleccionada. Marque cancelar para finalizar su voto. Una vez seleccionadas todas las opciones marque finalizar para emitir su voto.'
+START_SELECTION = 'Por favor escoja en que votación desea participar:'
+VOTING_IN = 'Usted está votando en la votación del grupo "%s". Marque en las opciones para agregar al final o eliminar la opción seleccionada. Marque cancelar para finalizar su voto. Una vez seleccionadas todas las opciones marque finalizar para emitir su voto.'
 VOTING_IN_WHIT_STATE = VOTING_IN + '\n\nSu voto actual es:\n%s'
-CANCEL = 'Se ha cancelado su voto en la discusión de "%s". Escribe /vote de nuevo para iniciar otra votación.'
-CONFIRM = 'Su voto en la discusión de "%s" a sido guardado satisfactoriamente. Recuerde que puede volver a ejercer su voto escribiendo /vote aquí nuevamente. Su último voto válido será el considerado al finalizar la discusión.\n\nSu voto actual es:\n%s'
-INVALID = 'Su voto en "%s" no se a podido emitir correctamente. Esto puede ocurrir por varias razones entre ellas que la votación a la cual hace referencia ya haya finalizado. Escriba /vote para emitir su voto de nuevo en la votación correcta o regístrese nuevamente en su chat usando /register en el grupo origen de la discusión.'
+CANCEL = 'Se ha cancelado su voto en la votación de "%s". Escribe /vote de nuevo para iniciar otra votación.'
+CONFIRM = 'Su voto en la votación de "%s" a sido guardado satisfactoriamente. Recuerde que puede volver a ejercer su voto escribiendo /vote aquí nuevamente. Su último voto válido será el considerado al finalizar la votación.\n\nSu voto actual es:\n%s'
+INVALID = 'Su voto en "%s" no se a podido emitir correctamente. Esto puede ocurrir por varias razones entre ellas que la votación a la cual hace referencia ya haya finalizado. Escriba /vote para emitir su voto de nuevo en la votación correcta o regístrese nuevamente en su chat usando /register en el grupo origen de la votación.'
 
 
 #Vote Callback helpers

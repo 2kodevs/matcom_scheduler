@@ -3,39 +3,40 @@ from telegram.ext import CommandHandler, Filters
 INTRO_G = '''
 Hola soy el bot Matcom Scheduler!!!
 
-Puedo ayudar a alcanzar el concenso de un grupo sobre una planificación. Especialmente sobre el calendario de pruebas.
+Puedo ayudar a alcanzar el concenso de un grupo sobre una votación. Especialmente sobre el calendario de pruebas( o mascotas :) ).
 Para poder usar el bot, agréguelo a un grupo. Solo los administradores del grupo podrán manejar una votación.
 
-Siendo administrador, use /create para iniciar una discusión y luego siga las instrucciones del bot por el chat privado. No olvide usar /close para obtener los resultados!
+Siendo administrador, use /create para iniciar una votación y luego siga las instrucciones del bot por el chat privado. No olvide usar /close para obtener los resultados!
 
 '''
 
 INTRO_PV = '''
 Hola soy el bot Matcom Scheduler!!!
 
-Puedo ayudar a alcanzar el concenso de un grupo sobre una planificación. Especialmente sobre el calendario de pruebas.
+Puedo ayudar a alcanzar el concenso de un grupo sobre una votación. Especialmente sobre el calendario de pruebas( o mascotas :) ).
 Para poder usar el bot, agréguelo a un grupo. Solo los administradores del grupo podrán manejar una votación.
 
-Siendo administrador, use /create en un grupo para iniciar una discusión y luego /config para configurar sus opciones. Una vez configurada una discusión, los miembros del grupo correspondiente podrán tomar parte. No olvide usar /close para obtener los resultados!
+Siendo administrador, use /create en un grupo para iniciar una votación y luego /config para configurar sus opciones. Una vez configurada una votación, los miembros del grupo correspondiente podrán tomar parte. No olvide usar /close para obtener los resultados!
 
 '''
 
 commands_pv = [
         ('start'    , 'Inicia el bot.'),
         ('config'   , 'Configura las opciones de la discución.'),
-        ('vote'     , 'Toma parte en la discusión actual.'),
+        ('vote'     , 'Toma parte en la votación actual.'),
         ('cancel'   , 'Cancela una acción en la configuración o la votación actual si se usa en el grupo.'),
         ('help'     , 'Muestra la ayuda.')
     ]
 
 commands_group = [
         ('start'    , 'Inicia el bot.'),
-        ('create'   , 'Crea una nueva discusión del calendario.'),
-        ('vote'     , 'Registrarse para votar en la discusión actual.'),
-        ('register' , 'Registrarse para votar en la discusión actual.'),
-        ('close'    , 'Cierra la discusión actual.'),
+        ('create'   , 'Crea una nueva votación del calendario.'),
+        ('vote'     , 'Registrarse para votar en la votación actual.'),
+        ('register' , 'Registrarse para votar en la votación actual.'),
+        ('close'    , 'Cierra la votación actual.'),
         ('cancel'   , 'Cancela una acción en la configuración o la votación actual si se usa en el grupo.'),
         ('list'     , 'Lista los usuarios que han votado.'),
+        ('status'   , 'Muestra la cantidad de votantes y resultados parciales'),
         ('models'   , 'Lista los modelos disponibles para usar.'),
         ('list_models' , 'Lista los modelos disponibles para usar.'),
         ('help'     , 'Muestra la ayuda.'),

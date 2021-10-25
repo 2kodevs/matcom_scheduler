@@ -3,7 +3,7 @@ from telegram.ext import CommandHandler, Filters
 
 # Messages
 ADMINS_ONLY     = 'Ups!!!, solo los administradores pueden usar este comando :('
-ACTIVE          = 'Antes de comenzar una nueva discusión debe cerrar la actual'
+ACTIVE          = 'Antes de comenzar una nueva votación debe cerrar la actual'
 CONFIG          = 'Este chat está disponible ahora en su lista privada de configuración'
 
 # Handler methods

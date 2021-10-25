@@ -13,7 +13,7 @@ EMPTY           = "La lista de opciones está vacía"
 CHOOSE_DEL      = 'Selecione las opciones a eliminar una por una'
 CHOOSE_ADD      = 'Continue añadiendo opciones'
 USELESS         = "Su configuración ha fallado, utilice /config nuevamente y añada algunas opciones cuando esté listo."
-DONE_CONFIG     = 'Perfecto! Ha terminado la configuración.\nUtilice /close en el chat relacionado para cerrar la discusión. Si necesita hacer algún cambio debe utilizar /cancel en el chat para cancelar la discusión y repetir el procedimiento para la nueva configuración.'
+DONE_CONFIG     = 'Perfecto! Ha terminado la configuración.\nUtilice /close en el chat relacionado para cerrar la votación. Si necesita hacer algún cambio debe utilizar /cancel en el chat para cancelar la votación y repetir el procedimiento para la nueva configuración.'
 INIT_DISCUSS    = 'Comienza la votación!!!\nUtiliza /vote para participar.\n\nLas opciones a organizar son:\n%s'
 BYE             = 'Se ha cancelado la configuración'
 

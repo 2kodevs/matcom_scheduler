@@ -6,7 +6,7 @@ from telegram.ext import CommandHandler, MessageHandler, Filters
 
 
 SET_MODEL_REGEX = r'^/set(\w+)'
-LIST_MESSAGE = 'Los modelos son las diferentes formas que el bot usa para determinar cúal es el calendario resultante de una votación.\n\nLa lista de modelos disponibles ahora mismo es:\n %s \n\n Actualmente se encuentra seleccionado el modelo: %s.'
+LIST_MESSAGE = 'Los modelos son las diferentes formas que el bot usa para determinar cúal es el resultado de una votación.\n\nLa lista de modelos disponibles ahora mismo es:\n %s \n\n Actualmente se encuentra seleccionado el modelo: %s.'
 
 def build_option(model):
     name = model.__name__

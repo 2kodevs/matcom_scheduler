@@ -17,7 +17,7 @@ def set_commands(bot):
         ('start'    , 'Inicia el bot.'),
         ('help'     , 'Muestra la ayuda.'),
         ('list'     , 'Lista los usuarios que han votado.'),
-        ('status'   , 'Muestra la cantidad de votantes'),
+        ('status'   , 'Muestra la cantidad de votantes y resultados parciales'),
         ('models'      , 'Lista los modelos disponibles para usar.'),
         ('list_models'      , 'Lista los modelos disponibles para usar.'),
     ])
