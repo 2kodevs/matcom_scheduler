@@ -12,7 +12,7 @@ class Score(BaseModel):
 
         for vote in data:
             for index, option in enumerate(vote):
-                option_score = N + 1 - index
+                option_score = N + 1 - (index + 1)
                 try:
                     scores[option] += option_score
                 except KeyError:
