@@ -1,7 +1,7 @@
 from .simple_model import SimpleModel
 
 class Positions(SimpleModel):
-    '''Busca el calendario que minimice los cambios de orden entre las propuestas.'''
+    '''Busca la ordenación que minimice los cambios de orden entre las propuestas.'''
 
     def distance(self, calendar1:list, calendar2:list):
         '''

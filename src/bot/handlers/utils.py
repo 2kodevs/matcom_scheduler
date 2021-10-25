@@ -43,3 +43,11 @@ def clear_chat(chat, context):
 
 def enumerate_options(options):
     return '\n'.join(f'{i + 1}-) {op}' for i, op in enumerate(options))
+
+def list_options(options):
+    if not isinstance(options[0], tuple):
+        return enumerate_options(options)
+    max_size = 0
+    for _, op in options:
+        max_size = max(max_size, len(op))
+    return '\n'.join(f'{op}{" " * (max_size - len(op))} - {score}' for score, op in options)

@@ -2,7 +2,7 @@ import re
 
 from ...model import use_model
 from .filters import private_text_filter
-from .utils import enumerate_options, is_chat_admin
+from .utils import enumerate_options, is_chat_admin, list_options
 from telegram import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
 from telegram.ext import CommandHandler, CallbackQueryHandler, Filters, MessageHandler
 
@@ -27,7 +27,7 @@ def status_group_voters(update, context):
         model = context.chat_data.get('model')
         solution = use_model(votes, model)
         sol_msg = 'Los resultados parciales de la votación son: \n'
-        sol_msg += enumerate_options(solution)
+        sol_msg += list_options(solution)
         assert False, (LIST%cant) + sol_msg
     except AssertionError as e:
         update.effective_message.reply_text(str(e))

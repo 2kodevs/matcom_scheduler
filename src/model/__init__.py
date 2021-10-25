@@ -1,3 +1,4 @@
+from .score import Score
 from .base import ModelError
 from .positions import Positions
 from .minimun import Minimum
@@ -17,11 +18,12 @@ def use_model(data, model_name=None):
     raise ModelError('Model not found')
 
 
-default_model = DEA_AR.__name__
+default_model = Score.__name__
 
 models = [
     DEA_AR,
     Positions,
     Minimum,
     MostPopular,
+    Score,
 ]
